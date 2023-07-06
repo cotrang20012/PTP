@@ -11,6 +11,6 @@ namespace PTP.Core.Domain.Entities
     {
         [MaxLength(255)]
         public string Name { get; set; } = null!;
-        public ICollection<Place> Places { get; set; } = null!;
+        public ICollection<Place>? Places { get; set; } = null!;
     }
 }

@@ -17,10 +17,12 @@ namespace PTP.Controllers
     {
         private readonly IJourneyService _journeyService;
         private readonly IMapper _mapper;
-        public JourneyController(IJourneyService journeyService, IMapper mapper)
+        private readonly IPlaceService _placeService;
+        public JourneyController(IJourneyService journeyService, IMapper mapper, IPlaceService placeService)
         {
             _journeyService = journeyService;
             _mapper = mapper;
+            _placeService = placeService;
         }
 
         [HttpGet]
@@ -28,8 +30,13 @@ namespace PTP.Controllers
         {
             try
             {
-                var entity = await _journeyService.GetAll();
-                return Ok(_mapper.Map<List<JourneyDto>>(entity));
+                var entities = await _journeyService.GetAll();
+                foreach(var entity in entities)
+                {
+                    var places = await _placeService.GetQueryable().Where(x => entity.PlaceId.Contains(x.Id.ToString())).ToListAsync();
+                    entity.Places = places;
+                }
+                return Ok(_mapper.Map<List<JourneyDto>>(entities));
             }
             catch (SqlException ex)
             {

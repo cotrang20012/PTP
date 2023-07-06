@@ -44,6 +44,11 @@ namespace PTP.Services
            return await _countryRepository.GetAsync(id, cancellationToken);
         }
 
+        public IQueryable<Country> GetQueryable()
+        {
+            return _countryRepository.Get();
+        }
+
         public async Task UpdateCountry(Country updatedCountry, CancellationToken cancellationToken = default)
         {
             var entity = await _countryRepository.GetAsync(updatedCountry.Id);

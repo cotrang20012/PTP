@@ -44,6 +44,11 @@ namespace PTP.Services
             return await _currencyRepository.GetAsync(id, cancellationToken);
         }
 
+        public IQueryable<Currency> GetQueryable()
+        {
+            return _currencyRepository.Get();
+        }
+
         public async Task UpdateCurrency(Currency updatedCurrency, CancellationToken cancellationToken = default)
         {
             var entity = await _currencyRepository.GetAsync(updatedCurrency.Id);

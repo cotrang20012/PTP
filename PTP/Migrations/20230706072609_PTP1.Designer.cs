@@ -12,7 +12,7 @@ using PTP.Database;
 namespace PTP.Migrations
 {
     [DbContext(typeof(PTPContext))]
-    [Migration("20230706021816_PTP1")]
+    [Migration("20230706072609_PTP1")]
     partial class PTP1
     {
         /// <inheritdoc />
@@ -136,8 +136,9 @@ namespace PTP.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<int>("PlaceId")
-                        .HasColumnType("int");
+                    b.Property<string>("PlaceId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
@@ -158,8 +159,6 @@ namespace PTP.Migrations
 
                     b.HasIndex("CurrencyId");
 
-                    b.HasIndex("PlaceId");
-
                     b.ToTable("Journeys");
 
                     b.HasData(
@@ -172,7 +171,7 @@ namespace PTP.Migrations
                             Description = "A trip with company at ...",
                             EndDate = new DateTime(2023, 7, 11, 0, 0, 0, 0, DateTimeKind.Local),
                             Name = "Company Trip",
-                            PlaceId = 3,
+                            PlaceId = "3,4",
                             StartDate = new DateTime(2023, 7, 6, 0, 0, 0, 0, DateTimeKind.Local),
                             Status = "Planning"
                         },
@@ -185,7 +184,7 @@ namespace PTP.Migrations
                             Description = "Đi chill cùng ae ...",
                             EndDate = new DateTime(2023, 7, 11, 0, 0, 0, 0, DateTimeKind.Local),
                             Name = "Đà Lạt Trip",
-                            PlaceId = 3,
+                            PlaceId = "3,4",
                             StartDate = new DateTime(2023, 7, 6, 0, 0, 0, 0, DateTimeKind.Local),
                             Status = "Planning"
                         });
@@ -272,26 +271,16 @@ namespace PTP.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PTP.Core.Domain.Entities.Place", "Place")
-                        .WithMany()
-                        .HasForeignKey("PlaceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Country");
 
                     b.Navigation("Currency");
-
-                    b.Navigation("Place");
                 });
 
             modelBuilder.Entity("PTP.Core.Domain.Entities.Place", b =>
                 {
-                    b.HasOne("PTP.Core.Domain.Entities.Country", "Country")
+                    b.HasOne("PTP.Core.Domain.Entities.Country", null)
                         .WithMany("Places")
                         .HasForeignKey("CountryId");
-
-                    b.Navigation("Country");
                 });
 
             modelBuilder.Entity("PTP.Core.Domain.Entities.Country", b =>

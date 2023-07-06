@@ -14,6 +14,7 @@ namespace PTP.Core.Interfaces.Services
         Task AddNewJourney(Journey newJourney, CancellationToken cancellationToken = default);
         Task DeleteJourney(int id, CancellationToken cancellationToken = default);
         Task UpdateJourney(Journey updatedJourney, CancellationToken cancellationToken = default);
+        Task RemovePlacesFromJourney(params int[] placeId);
         Task TestFunction();
     }
 }

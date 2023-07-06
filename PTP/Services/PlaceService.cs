@@ -9,10 +9,12 @@ namespace PTP.Services
     public class PlaceService : IPlaceService
     {
         private readonly IRepository<Place> _placeRepository;
+        private readonly IJourneyService _journeyService;
 
-        public PlaceService(IRepository<Place> placeRepository)
+        public PlaceService(IRepository<Place> placeRepository, IJourneyService journeyService)
         {
             _placeRepository = placeRepository;
+            _journeyService = journeyService;
         }
 
         public async Task AddNewPlace(Place newPlace, CancellationToken cancellationToken = default)
@@ -30,6 +32,7 @@ namespace PTP.Services
             }
 
             _placeRepository.Delete(entity);
+            await _journeyService.RemovePlacesFromJourney(entity.Id);
             await _placeRepository.SaveChangesAsync();
         }
 
@@ -42,6 +45,11 @@ namespace PTP.Services
         public async Task<Place?> GetAsync(int id, CancellationToken cancellationToken = default)
         {
             return await _placeRepository.GetAsync(id, cancellationToken);
+        }
+
+        public IQueryable<Place> GetQueryable()
+        {
+            return _placeRepository.Get();
         }
 
         public async Task UpdatePlace(Place updatedPlace, CancellationToken cancellationToken = default)

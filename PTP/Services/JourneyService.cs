@@ -4,8 +4,6 @@ using PTP.Core.Exceptions;
 using PTP.Core.Interfaces.Repositories;
 using PTP.Core.Interfaces.Services;
 
-
-
 namespace PTP.Services
 {
     public class JourneyService : IJourneyService
@@ -24,7 +22,8 @@ namespace PTP.Services
 
         public async Task<IEnumerable<Journey>?> GetAll(CancellationToken cancellationToken)
         {
-            var entity = await _journeyRepository.Get().Include(j => j.Currency).ToListAsync();
+            var entity = await _journeyRepository.Get().Include(j => j.Country).Include(j => j.Currency)
+                .ToListAsync();
             return entity;
         }
 
@@ -58,11 +57,26 @@ namespace PTP.Services
             _journeyRepository.Update(entity);
             await _journeyRepository.SaveChangesAsync();
         }
-
+        public async Task RemovePlacesFromJourney(params int[] placeId)
+        {
+            foreach(var place in placeId)
+            {
+                var entities = await _journeyRepository.Get().Where(j => j.PlaceId.Contains(place.ToString())).ToListAsync();
+                foreach(var entity in entities)
+                {
+                    var placeString = entity.PlaceId;
+                    var placeStringId = placeString.Split(',');
+                    var placeIdToRemove = place.ToString();
+                    var placeStringAfterRemove = placeStringId.Where(id => id != placeIdToRemove).ToArray();
+                    var newPlaceString = string.Join(",", placeStringAfterRemove);
+                    entity.PlaceId = newPlaceString;
+                }
+            }
+            await _journeyRepository.SaveChangesAsync();
+        }
         public async Task TestFunction()
         {
-            var entity = await _journeyRepository.GetAsync(2);
-            entity.Amount = 5;
+            
         }
 
         private void MapFromUpdateToEntity(Journey updatedJourney, Journey entity)
@@ -77,6 +91,11 @@ namespace PTP.Services
             entity.StartDate = updatedJourney.StartDate.Date;
             entity.EndDate = updatedJourney.EndDate.Date;
             entity.Version = updatedJourney.Version;
+        }
+
+        public IQueryable<Journey> GetQueryable()
+        {
+            return _journeyRepository.Get();
         }
     }
 }

@@ -12,6 +12,5 @@ namespace PTP.Core.Domain.Entities
         [MaxLength(255)]
         public string Name { get; set; } = null!;
         public int? CountryId { get; set; }
-        public Country? Country { get; set; } = null!;
     }
 }

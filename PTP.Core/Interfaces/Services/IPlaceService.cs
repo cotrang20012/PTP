@@ -14,5 +14,6 @@ namespace PTP.Core.Interfaces.Services
         Task AddNewPlace(Place newPlace, CancellationToken cancellationToken = default);
         Task DeletePlace(int id, CancellationToken cancellationToken = default);
         Task UpdatePlace(Place updatedPlace, CancellationToken cancellationToken = default);
+        IQueryable<Place> GetQueryable();
     }
 }

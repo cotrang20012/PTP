@@ -14,6 +14,9 @@ namespace PTP.Extensions
         {
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<IJourneyService, JourneyService>();
+            services.AddScoped<ICurrencyService, CurrencyService>();
+            services.AddScoped<ICountryService, CountryService>();
+            services.AddScoped<IPlaceService, PlaceService>();
             //services.AddScoped<AbstractValidator<UpsertJourneyRequest>, UpdateJourneyValidator>();
             //services.AddScoped<AbstractValidator<UpsertJourneyRequest>, AddJourneyValidator>();
 

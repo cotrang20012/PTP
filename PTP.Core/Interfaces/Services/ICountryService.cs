@@ -14,5 +14,6 @@ namespace PTP.Core.Interfaces.Services
         Task AddNewCountry(Country newCountry, CancellationToken cancellationToken = default);
         Task DeleteCountry(int id, CancellationToken cancellationToken = default);
         Task UpdateCountry(Country updatedCountry, CancellationToken cancellationToken = default);
+        IQueryable<Country> GetQueryable();
     }
 }

@@ -44,8 +44,8 @@ namespace PTP.Database
             modelBuilder.Entity<Currency>().HasData(new Currency() { Id = 3, Name = "VND" });
 
             //model seeding for journey 
-            modelBuilder.Entity<Journey>().HasData(new Journey() { Id = 1, Name = "Company Trip", Description = "A trip with company at ...", CountryId = 2, PlaceId = 3, CurrencyId = 3, Amount = 5000000, Status = JourneyStatus.Planning.ToString(), StartDate = DateTime.Now.Date, EndDate = DateTime.Now.AddDays(5).Date });
-            modelBuilder.Entity<Journey>().HasData(new Journey() { Id = 2, Name = "Đà Lạt Trip", Description = "Đi chill cùng ae ...", CountryId = 2, PlaceId = 3, CurrencyId = 3, Amount = 4000000, Status = JourneyStatus.Planning.ToString(), StartDate = DateTime.Now.Date, EndDate = DateTime.Now.AddDays(5).Date });
+            modelBuilder.Entity<Journey>().HasData(new Journey() { Id = 1, Name = "Company Trip", Description = "A trip with company at ...", CountryId = 2, PlaceId ="3,4", CurrencyId = 3, Amount = 5000000, Status = JourneyStatus.Planning.ToString(), StartDate = DateTime.Now.Date, EndDate = DateTime.Now.AddDays(5).Date });
+            modelBuilder.Entity<Journey>().HasData(new Journey() { Id = 2, Name = "Đà Lạt Trip", Description = "Đi chill cùng ae ...", CountryId = 2, PlaceId = "3,4", CurrencyId = 3, Amount = 4000000, Status = JourneyStatus.Planning.ToString(), StartDate = DateTime.Now.Date, EndDate = DateTime.Now.AddDays(5).Date });
         }
     }
 }

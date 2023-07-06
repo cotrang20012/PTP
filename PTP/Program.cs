@@ -1,5 +1,7 @@
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using PTP.Database;
 using PTP.Extensions;
 using PTP.Middlewares;
@@ -19,11 +21,11 @@ namespace PTP
                 {
                     builder.WithOrigins("http://localhost:5000")
                         .AllowAnyHeader()
-                        .AllowAnyMethod();
+                    .AllowAnyMethod();
                 });
             });
 
-            builder.Services.AddControllers().AddNewtonsoftJson();
+            builder.Services.AddControllers().AddNewtonsoftJson(options =>  options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
            
             builder.Services.AddDbContext<PTPContext>();
 

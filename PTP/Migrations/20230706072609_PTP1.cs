@@ -72,7 +72,7 @@ namespace PTP.Migrations
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CountryId = table.Column<int>(type: "int", nullable: false),
-                    PlaceId = table.Column<int>(type: "int", nullable: false),
+                    PlaceId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CurrencyId = table.Column<int>(type: "int", nullable: false),
                     Amount = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -91,12 +91,6 @@ namespace PTP.Migrations
                         name: "FK_Journeys_Currencies_CurrencyId",
                         column: x => x.CurrencyId,
                         principalTable: "Currencies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Journeys_Places_PlaceId",
-                        column: x => x.PlaceId,
-                        principalTable: "Places",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -122,6 +116,15 @@ namespace PTP.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Journeys",
+                columns: new[] { "Id", "Amount", "CountryId", "CurrencyId", "Description", "EndDate", "Name", "PlaceId", "StartDate", "Status" },
+                values: new object[,]
+                {
+                    { 1, 5000000, 2, 3, "A trip with company at ...", new DateTime(2023, 7, 11, 0, 0, 0, 0, DateTimeKind.Local), "Company Trip", "3,4", new DateTime(2023, 7, 6, 0, 0, 0, 0, DateTimeKind.Local), "Planning" },
+                    { 2, 4000000, 2, 3, "Đi chill cùng ae ...", new DateTime(2023, 7, 11, 0, 0, 0, 0, DateTimeKind.Local), "Đà Lạt Trip", "3,4", new DateTime(2023, 7, 6, 0, 0, 0, 0, DateTimeKind.Local), "Planning" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Places",
                 columns: new[] { "Id", "CountryId", "Name" },
                 values: new object[,]
@@ -134,15 +137,6 @@ namespace PTP.Migrations
                     { 6, 3, "Aargau" }
                 });
 
-            migrationBuilder.InsertData(
-                table: "Journeys",
-                columns: new[] { "Id", "Amount", "CountryId", "CurrencyId", "Description", "EndDate", "Name", "PlaceId", "StartDate", "Status" },
-                values: new object[,]
-                {
-                    { 1, 5000000, 2, 3, "A trip with company at ...", new DateTime(2023, 7, 11, 0, 0, 0, 0, DateTimeKind.Local), "Company Trip", 3, new DateTime(2023, 7, 6, 0, 0, 0, 0, DateTimeKind.Local), "Planning" },
-                    { 2, 4000000, 2, 3, "Đi chill cùng ae ...", new DateTime(2023, 7, 11, 0, 0, 0, 0, DateTimeKind.Local), "Đà Lạt Trip", 3, new DateTime(2023, 7, 6, 0, 0, 0, 0, DateTimeKind.Local), "Planning" }
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_Journeys_CountryId",
                 table: "Journeys",
@@ -152,11 +146,6 @@ namespace PTP.Migrations
                 name: "IX_Journeys_CurrencyId",
                 table: "Journeys",
                 column: "CurrencyId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Journeys_PlaceId",
-                table: "Journeys",
-                column: "PlaceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Places_CountryId",
@@ -171,10 +160,10 @@ namespace PTP.Migrations
                 name: "Journeys");
 
             migrationBuilder.DropTable(
-                name: "Currencies");
+                name: "Places");
 
             migrationBuilder.DropTable(
-                name: "Places");
+                name: "Currencies");
 
             migrationBuilder.DropTable(
                 name: "Countries");
