@@ -16,6 +16,7 @@ namespace PTP.Database
         {
             base.OnConfiguring(optionsBuilder);
             optionsBuilder
+ //               .LogTo(Console.WriteLine)
                 .UseSqlServer(@"Data Source=localhost; Initial Catalog=PTP;TrustServerCertificate=true; Integrated Security=True;")
                 .UseExceptionProcessor();
         }
@@ -44,12 +45,12 @@ namespace PTP.Database
             modelBuilder.Entity<Currency>().HasData(new Currency() { Id = 3, Name = "VND" });
 
             //model seeding for journey 
-            modelBuilder.Entity<Journey>().HasData(new Journey() { Id = 1, Name = "Company Trip", Description = "A trip with company at ...", CountryId = 2, PlaceId ="3,4", CurrencyId = 3, Amount = 5000000, Status = JourneyStatus.Planning.ToString(), StartDate = DateTime.Now.Date, EndDate = DateTime.Now.AddDays(5).Date });
-            modelBuilder.Entity<Journey>().HasData(new Journey() { Id = 2, Name = "Đà Lạt Trip", Description = "Đi chill cùng ae ...", CountryId = 2, PlaceId = "3,4", CurrencyId = 3, Amount = 4000000, Status = JourneyStatus.Planning.ToString(), StartDate = DateTime.Now.Date, EndDate = DateTime.Now.AddDays(5).Date });
-            modelBuilder.Entity<Journey>().HasData(new Journey() { Id = 3, Name = "Đà Lạt Trip2", Description = "Đi chill cùng ae ...", CountryId = 2, PlaceId = "3,4", CurrencyId = 3, Amount = 4000000, Status = JourneyStatus.Planning.ToString(), StartDate = DateTime.Now.Date, EndDate = DateTime.Now.AddDays(5).Date });
-            modelBuilder.Entity<Journey>().HasData(new Journey() { Id = 4, Name = "Đà Lạt Trip3", Description = "Đi chill cùng ae ...", CountryId = 2, PlaceId = "3,4", CurrencyId = 3, Amount = 4000000, Status = JourneyStatus.Planning.ToString(), StartDate = DateTime.Now.Date, EndDate = DateTime.Now.AddDays(5).Date });
-            modelBuilder.Entity<Journey>().HasData(new Journey() { Id = 5, Name = "Đà Lạt Trip4", Description = "Đi chill cùng ae ...", CountryId = 2, PlaceId = "3,4", CurrencyId = 3, Amount = 4000000, Status = JourneyStatus.Planning.ToString(), StartDate = DateTime.Now.Date, EndDate = DateTime.Now.AddDays(5).Date });
-            modelBuilder.Entity<Journey>().HasData(new Journey() { Id = 6, Name = "Đà Lạt Trip5", Description = "Đi chill cùng ae ...", CountryId = 2, PlaceId = "3,4", CurrencyId = 3, Amount = 4000000, Status = JourneyStatus.Planning.ToString(), StartDate = DateTime.Now.Date, EndDate = DateTime.Now.AddDays(5).Date });
+            modelBuilder.Entity<Journey>().HasData(new Journey() { Id = 1, Name = "Company Trip", Description = "A trip with company at ...", CountryId = 2, PlaceId ="3", CurrencyId = 3, Amount = 5000000, Status = JourneyStatus.Planning.ToString(), StartDate = DateTime.Now.Date, EndDate = DateTime.Now.AddDays(5).Date, Days = 5,Nights = 4 });
+            modelBuilder.Entity<Journey>().HasData(new Journey() { Id = 2, Name = "Đà Lạt Trip", Description = "Đi chill cùng ae ...", CountryId = 2, PlaceId = "3,4", CurrencyId = 3, Amount = 4000000, Status = JourneyStatus.Planning.ToString(), StartDate = DateTime.Now.Date, EndDate = DateTime.Now.AddDays(5).Date, Days = 5, Nights = 4 });
+            modelBuilder.Entity<Journey>().HasData(new Journey() { Id = 3, Name = "Đà Lạt Trip2", Description = "Đi chill cùng ae ...", CountryId = 2, PlaceId = "3,4", CurrencyId = 3, Amount = 4000000, Status = JourneyStatus.Planning.ToString(), StartDate = DateTime.Now.Date, EndDate = DateTime.Now.AddDays(5).Date, Days = 5, Nights = 4 });
+            modelBuilder.Entity<Journey>().HasData(new Journey() {Id = 4, Name = "Đà Lạt Trip3", Description = "Đi chill cùng ae ...", CountryId = 2, PlaceId = "3", CurrencyId = 3, Amount = 4000000, Status = JourneyStatus.Planning.ToString(), StartDate = DateTime.Now.Date, EndDate = DateTime.Now.AddDays(5).Date, Days = 5, Nights = 4 });
+            modelBuilder.Entity<Journey>().HasData(new Journey() {Id = 5, Name = "Đà Lạt Trip4", Description = "Đi chill cùng ae ...", CountryId = 2, PlaceId = "3,4", CurrencyId = 3, Amount = 4000000, Status = JourneyStatus.Planning.ToString(), StartDate = DateTime.Now.Date, EndDate = DateTime.Now.AddDays(5).Date, Days = 5, Nights = 4 });
+            modelBuilder.Entity<Journey>().HasData(new Journey() {Id = 6, Name = "Đà Lạt Trip5", Description = "Đi chill cùng ae ...", CountryId = 2, PlaceId = "4", CurrencyId = 3, Amount = 4000000, Status = JourneyStatus.Planning.ToString(), StartDate = DateTime.Now.Date, EndDate = DateTime.Now.AddDays(5).Date, Days = 5, Nights = 4 });
         }
     }
 }

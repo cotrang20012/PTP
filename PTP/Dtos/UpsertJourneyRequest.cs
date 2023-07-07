@@ -13,5 +13,7 @@
         public DateTime EndDate { get; set; }
         public string Status { get; set; } = null!;
         public byte[]? Version { get; set; } = null!;
+        public int Days { get; set; }
+        public int Nights { get; set; }
     }
 }

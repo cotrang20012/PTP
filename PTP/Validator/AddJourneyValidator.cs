@@ -30,6 +30,11 @@ namespace PTP.Validator
             RuleFor(dto => dto.EndDate)
                 .GreaterThan(dto => dto.StartDate).WithMessage("End date must be after start date");
 
+            RuleFor(dto => dto.Days)
+                .NotEmpty().GreaterThan(0).GreaterThan(dto => dto.Nights).WithMessage("Journey need to have a duration, duration should be larger than the number of nights the journey will take");
+            RuleFor(dto => dto.Nights)
+                .NotEmpty().GreaterThan(0).WithMessage("Journey need to have a number that represent how many nights the journey will take");
+
             RuleFor(dto => dto.Status)
                 .Must(value => Enum.IsDefined(typeof(JourneyStatus), value)).WithMessage("Invalid value for journey Status.");
         }

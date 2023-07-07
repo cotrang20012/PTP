@@ -37,13 +37,12 @@ namespace PTP.Controllers
         {
             try
             {
-                var numberOfPage = 1;
-                var entities = await _journeyService.GetPagination(searchJourneyRequest: searchJourneyRequest,pageNumber: pageNumber,pageSize: pageSize);
-                var totalCount = entities.Count();
-
-                if(totalCount > 0)
-                { 
-                    numberOfPage = Convert.ToInt32(Math.Ceiling((double)(totalCount / pageSize)));
+                TotalCountAndPages totalCountAndPages = new TotalCountAndPages { TotalCount = 0,PageCount = 1 };
+                var entities = await _journeyService.GetPagination(searchJourneyRequest: searchJourneyRequest,totalCountAndPages: totalCountAndPages,pageNumber: pageNumber,pageSize: pageSize);
+               
+                if(totalCountAndPages.TotalCount > 0)
+                {
+                    totalCountAndPages.PageCount = Convert.ToInt32(Math.Ceiling((double)totalCountAndPages.TotalCount / (double)pageSize));
                 }
 
                 foreach(var entity in entities)
@@ -59,8 +58,8 @@ namespace PTP.Controllers
                     Data = _mapper.Map<List<JourneyDto>>(entities),
                     ErrorMessage = "None",
                     StatusCode = StatusCodes.Status200OK,
-                    TotalPage = numberOfPage,
-                    TotalCount = totalCount
+                    TotalPage = totalCountAndPages.PageCount,
+                    TotalCount = totalCountAndPages.TotalCount
                 };
 
                 return Ok(response);

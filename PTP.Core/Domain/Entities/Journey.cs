@@ -19,5 +19,7 @@ namespace PTP.Core.Domain.Entities
         public Currency? Currency { get; set; } = null!;
         public int Amount { get; set; }
         public string Status { get; set; } = null!;
+        public int Days { get; set; }
+        public int Nights { get; set; }
     }
 }
