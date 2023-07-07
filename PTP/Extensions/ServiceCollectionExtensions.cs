@@ -1,10 +1,8 @@
-﻿using FluentValidation;
-using PTP.Core.Interfaces.Repositories;
+﻿using PTP.Core.Interfaces.Repositories;
 using PTP.Core.Interfaces.Services;
-using PTP.Dtos;
 using PTP.Repositories;
 using PTP.Services;
-using PTP.Validator;
+
 
 namespace PTP.Extensions
 {

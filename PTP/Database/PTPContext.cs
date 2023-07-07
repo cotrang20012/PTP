@@ -11,7 +11,7 @@ namespace PTP.Database
         public DbSet<Currency> Currencies { get; set; } = null!;
         public DbSet<Country> Countries { get; set; } = null!;
         public DbSet<Place> Places { get; set; } = null!;
-
+        public PTPContext(DbContextOptions<PTPContext> options) : base(options) { }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);

@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using PTP.Core.Exceptions;
 using PTP.Core.Interfaces.Services;
-using PTP.Services;
+using PTP.Core.Dtos;
 
 namespace PTP.Controllers
 {
@@ -20,17 +19,18 @@ namespace PTP.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteController([FromRoute]int id)
+        public async Task<ActionResult> DeletePlace([FromRoute]int id)
         {
-            try
-            {
-                await _placeService.DeletePlace(id);
-                return Ok("Delete place success!!!");
-            }
-            catch (PlaceNotFoundException)
-            {
-                return BadRequest("Place not found!!!");
-            }
+            await _placeService.DeletePlace(id);
+            var response = _placeService.CreateBaseResponse(true, "Delete place success", null, "None", StatusCodes.Status200OK);
+            return Ok(response);
+        }
+        [HttpPut]
+        public async Task<ActionResult> AddPlace([FromBody]UpsertPlaceRequestDto upsertPlaceRequest)
+        {
+            await _placeService.AddNewPlace(upsertPlaceRequest);
+            var response = _placeService.CreateBaseResponse(true, "Insert new place succes", null, "None", StatusCodes.Status200OK);
+            return Ok(response);
         }
     }
 }

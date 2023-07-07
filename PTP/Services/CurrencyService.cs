@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PTP.Core.Domain.Entities;
+using PTP.Core.Domain.Objects;
 using PTP.Core.Exceptions;
 using PTP.Core.Interfaces.Repositories;
 using PTP.Core.Interfaces.Services;
@@ -19,6 +20,19 @@ namespace PTP.Services
         {
             await _currencyRepository.AddAsync(newCurrency);
             await _currencyRepository.SaveChangesAsync();
+        }
+
+        public BaseResponse CreateBaseResponse(bool responseState, string responseMessage, object responseData, string respsoneErrorMessage, int responseStatusCode)
+        {
+            var response = new BaseResponse()
+            {
+                Success = responseState,
+                Message = responseMessage,
+                Data = responseData,
+                ErrorMessage = respsoneErrorMessage,
+                StatusCode = responseStatusCode
+            };
+            return response;
         }
 
         public async Task DeleteCurrency(int id, CancellationToken cancellationToken = default)

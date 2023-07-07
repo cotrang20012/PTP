@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
 using PTP.Core.Domain.Enums;
-using PTP.Dtos;
+using PTP.Core.Dtos;
 using System;
 
 namespace PTP.Validator
 {
-    public class AddJourneyValidator : AbstractValidator<UpsertJourneyRequest>
+    public class AddJourneyValidator : AbstractValidator<UpsertJourneyRequestDto>
     {
         public AddJourneyValidator() 
         {
@@ -21,6 +21,13 @@ namespace PTP.Validator
                 .NotEmpty().WithMessage("Journey need to be associate with a location");
             RuleFor(dto => dto.Amount)
                 .NotEmpty().GreaterThan(0).WithMessage("Journey need to be associate with an amount");
+            RuleFor(dto => dto.CurrencyName)
+                .NotEmpty().WithMessage("Please choose a currency");
+            RuleFor(dto => dto.CountryName)
+                .NotEmpty().WithMessage("Please choose a country");
+            RuleFor(dto => dto.PlaceName)
+                .NotEmpty().WithMessage("Please choose a places");
+
 
             RuleFor(dto => dto.StartDate)
                 .NotEmpty().WithMessage("Journey need to have a start date");

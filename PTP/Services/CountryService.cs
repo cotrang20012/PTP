@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PTP.Core.Domain.Entities;
+using PTP.Core.Domain.Objects;
 using PTP.Core.Exceptions;
 using PTP.Core.Interfaces.Repositories;
 using PTP.Core.Interfaces.Services;
@@ -21,6 +22,19 @@ namespace PTP.Services
             await _countryRepository.SaveChangesAsync();
         }
 
+        public BaseResponse CreateBaseResponse(bool responseState, string responseMessage, object responseData, string respsoneErrorMessage, int responseStatusCode)
+        {
+            var response = new BaseResponse()
+            {
+                Success = responseState,
+                Message = responseMessage,
+                Data = responseData,
+                ErrorMessage = respsoneErrorMessage,
+                StatusCode = responseStatusCode
+            };
+            return response;
+        }
+
         public async Task DeleteCountry(int id, CancellationToken cancellationToken = default)
         {
             var entity = await _countryRepository.GetAsync(id);
@@ -28,7 +42,6 @@ namespace PTP.Services
             {
                 throw new CountryNotFoundException($"Country with id: {id} doesn't exist");
             }
-            //await Task.Delay(3000);
             _countryRepository.Delete(entity);
             await _countryRepository.SaveChangesAsync();
         }
@@ -48,7 +61,6 @@ namespace PTP.Services
         {
             return _countryRepository.Get();
         }
-
         public async Task UpdateCountry(Country updatedCountry, CancellationToken cancellationToken = default)
         {
             var entity = await _countryRepository.GetAsync(updatedCountry.Id);

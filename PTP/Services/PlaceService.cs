@@ -1,8 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Azure;
+using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using PTP.Core.Domain.Entities;
+using PTP.Core.Domain.Objects;
+using PTP.Core.Dtos;
 using PTP.Core.Exceptions;
 using PTP.Core.Interfaces.Repositories;
 using PTP.Core.Interfaces.Services;
+using PTP.Validator;
 
 namespace PTP.Services
 {
@@ -10,17 +16,40 @@ namespace PTP.Services
     {
         private readonly IRepository<Place> _placeRepository;
         private readonly IJourneyService _journeyService;
-
-        public PlaceService(IRepository<Place> placeRepository, IJourneyService journeyService)
+        private readonly IRepository<Country> _countryRepository;
+        private readonly IMapper _mapper;
+        public PlaceService(IRepository<Place> placeRepository, IJourneyService journeyService, IRepository<Country> countryRepository,IMapper mapper)
         {
             _placeRepository = placeRepository;
             _journeyService = journeyService;
+            _countryRepository = countryRepository;
+            _mapper = mapper;
         }
 
-        public async Task AddNewPlace(Place newPlace, CancellationToken cancellationToken = default)
+        public async Task AddNewPlace(UpsertPlaceRequestDto newPlace, CancellationToken cancellationToken = default)
         {
-            await _placeRepository.AddAsync(newPlace);
+            var addValidator = new AddPlaceValidator();
+            var addValidationResult = addValidator.Validate(newPlace);
+            if (!addValidationResult.IsValid)
+            {
+                throw new BadUserInputException(addValidationResult.Errors[0].ErrorMessage);
+            }
+            var entity = _mapper.Map<Place>(newPlace);
+            await _placeRepository.AddAsync(entity);
             await _placeRepository.SaveChangesAsync();
+        }
+
+        public BaseResponse CreateBaseResponse(bool responseState, string responseMessage, object responseData, string respsoneErrorMessage, int responseStatusCode)
+        {
+            var response = new BaseResponse()
+            {
+                Success = responseState,
+                Message = responseMessage,
+                Data = responseData,
+                ErrorMessage = respsoneErrorMessage,
+                StatusCode = responseStatusCode
+            };
+            return response;
         }
 
         public async Task DeletePlace(int id, CancellationToken cancellationToken = default)
@@ -52,24 +81,22 @@ namespace PTP.Services
             return _placeRepository.Get();
         }
 
-        public async Task UpdatePlace(Place updatedPlace, CancellationToken cancellationToken = default)
+        public async Task UpdatePlace(UpsertPlaceRequestDto updatedPlace, CancellationToken cancellationToken = default)
         {
-            var entity = await _placeRepository.GetAsync(updatedPlace.Id);
+            var updateValidator = new UpdatePlaceValidator();
+            var updateValidationResult = updateValidator.Validate(updatedPlace);
+            if (!updateValidationResult.IsValid)
+            {
+                throw new BadUserInputException(updateValidationResult.Errors[0].ErrorMessage);
+            }
+            var entity = await _placeRepository.GetAsync((int)updatedPlace.Id);
             if (entity == default(Place))
             {
                 throw new PlaceNotFoundException($"Place with id: {updatedPlace.Id} doesn't exist");
             }
-
-            MapFromUpdateToEntity(updatedPlace, entity);
+            entity = _mapper.Map<Place>(entity);
             _placeRepository.Update(entity);
             await _placeRepository.SaveChangesAsync();
-        }
-
-        private void MapFromUpdateToEntity(Place updatedPlace, Place entity)
-        {
-            entity.Name = updatedPlace.Name;
-            entity.CountryId = updatedPlace.CountryId;
-            entity.Version = updatedPlace.Version;
         }
     }
 }

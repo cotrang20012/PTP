@@ -1,6 +1,4 @@
-using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using PTP.Database;
 using PTP.Extensions;
@@ -34,7 +32,7 @@ namespace PTP
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
+            
             builder.Services.Register();
 
             var app = builder.Build();
@@ -52,7 +50,8 @@ namespace PTP
             app.UseHttpsRedirection();
             app.UseCors();
             app.MapControllers();
-
+            var loggerFactory = app.Services.GetService<ILoggerFactory>();
+            loggerFactory.AddFile(builder.Configuration["Logging:LogFilePath"].ToString());
             app.Run();
         }
 

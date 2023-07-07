@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PTP.Core.Domain.Objects
+namespace PTP.Core.Dtos
 {
-    public class SearchJourneyRequest
+    public class SearchJourneyRequestDto
     {
         public string NameAndDescription { get; set; } = null!;
         public int? CurrencyId { get; set; }
@@ -17,6 +17,6 @@ namespace PTP.Core.Domain.Objects
         public DateTime? ToStartDate { get; set; }
         public DateTime? FromEndDate { get; set; }
         public DateTime? ToEndDate { get; set; }
-        public string Status { get; set; } = null!; 
+        public string Status { get; set; } = null!;
     }
 }

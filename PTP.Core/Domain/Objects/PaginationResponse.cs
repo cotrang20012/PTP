@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PTP.Core.Domain.Objects
 {
-    public class PaginationResponse<T> : BaseResponse<T>
+    public class PaginationResponse : BaseResponse
     {
         public int TotalCount { get; set; }
         public int TotalPage { get; set; }

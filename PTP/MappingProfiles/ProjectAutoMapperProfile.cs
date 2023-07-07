@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using PTP.Core.Domain.Entities;
-using PTP.Dtos;
+using PTP.Core.Dtos;
 
 namespace PTP.MappingProfiles
 {
@@ -9,7 +9,8 @@ namespace PTP.MappingProfiles
         public ProjectAutoMapperProfile() 
         {
             CreateMap<Journey, JourneyDto>();
-            CreateMap<UpsertJourneyRequest, Journey>();
+            CreateMap<UpsertJourneyRequestDto, Journey>();
+            CreateMap<UpsertPlaceRequestDto, Place>();
         }
     }
 }

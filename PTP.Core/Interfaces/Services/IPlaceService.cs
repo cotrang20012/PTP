@@ -1,4 +1,6 @@
 ﻿using PTP.Core.Domain.Entities;
+using PTP.Core.Domain.Objects;
+using PTP.Core.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +13,10 @@ namespace PTP.Core.Interfaces.Services
     {
         Task<Place?> GetAsync(int id, CancellationToken cancellationToken = default);
         Task<IEnumerable<Place>?> GetAll(CancellationToken cancellationToken = default);
-        Task AddNewPlace(Place newPlace, CancellationToken cancellationToken = default);
+        Task AddNewPlace(UpsertPlaceRequestDto newPlace, CancellationToken cancellationToken = default);
         Task DeletePlace(int id, CancellationToken cancellationToken = default);
-        Task UpdatePlace(Place updatedPlace, CancellationToken cancellationToken = default);
+        Task UpdatePlace(UpsertPlaceRequestDto updatedPlace, CancellationToken cancellationToken = default);
+        BaseResponse CreateBaseResponse(bool responseState, string responseMessage, Object responseData, string respsoneErrorMessage, int responseStatusCode);
         IQueryable<Place> GetQueryable();
     }
 }
