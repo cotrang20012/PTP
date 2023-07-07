@@ -11,6 +11,7 @@ namespace PTP.Core.Dtos
         public string NameAndDescription { get; set; } = null!;
         public int? CurrencyId { get; set; }
         public int? CountryId { get; set; }
+        public string PlaceId { get; set; } = null!;
         public int? FromAmount { get; set; }
         public int? ToAmount { get; set; }
         public DateTime? FromStartDate { get; set; }

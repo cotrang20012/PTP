@@ -51,6 +51,10 @@ namespace PTP.Services
             {
                 journeyQuery = journeyQuery.Where(x => x.Amount >= searchJourneyRequest.FromAmount);
             }
+            if (searchJourneyRequest.PlaceId != String.Empty)
+            {
+                journeyQuery = journeyQuery.Where(x => x.PlaceId.Contains(searchJourneyRequest.PlaceId));
+            }
             if (searchJourneyRequest.ToAmount != null && searchJourneyRequest.ToAmount > 0 && searchJourneyRequest.ToAmount > searchJourneyRequest.FromAmount)
             {
                 journeyQuery = journeyQuery.Where(x => x.Amount <= searchJourneyRequest.ToAmount);
@@ -70,6 +74,10 @@ namespace PTP.Services
             if (searchJourneyRequest.ToEndDate != null && searchJourneyRequest.ToEndDate >= searchJourneyRequest.FromEndDate)
             {
                 journeyQuery = journeyQuery.Where(x => x.EndDate <= searchJourneyRequest.ToEndDate);
+            }
+            if (searchJourneyRequest.PlaceId != String.Empty)
+            {
+                journeyQuery = journeyQuery.Where(x => x.Status.Contains(searchJourneyRequest.Status));
             }
 
             totalCountAndPages.TotalCount = await journeyQuery.CountAsync();

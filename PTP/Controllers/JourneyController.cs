@@ -11,18 +11,10 @@ namespace PTP.Controllers
     public class JourneyController : ControllerBase
     {
         private readonly IJourneyService _journeyService;
-        private readonly IMapper _mapper;
-        private readonly IPlaceService _placeService;
-        private readonly ICountryService _countryService;
-        private readonly ICurrencyService _currencyService;
 
-        public JourneyController(IJourneyService journeyService, IMapper mapper, IPlaceService placeService, ICountryService countryService, ICurrencyService currencyService)
+        public JourneyController(IJourneyService journeyService)
         {
             _journeyService = journeyService;
-            _mapper = mapper;
-            _placeService = placeService;
-            _countryService = countryService;
-            _currencyService = currencyService;
         }
 
         [HttpPost]
@@ -30,11 +22,12 @@ namespace PTP.Controllers
         {
             TotalCountAndPages totalCountAndPages = new TotalCountAndPages { TotalCount = 0,PageCount = 1 };
             var entities = await _journeyService.GetSearchJourneyPagination(searchJourneyRequest: searchJourneyRequest,totalCountAndPages: totalCountAndPages,pageNumber: pageNumber,pageSize: pageSize);
-            var response = _journeyService.CreatePaginationResponse(true, "Get journey lít success", entities, "None", StatusCodes.Status200OK, totalCountAndPages);
+            var response = _journeyService.CreatePaginationResponse(true, "Get journey list success", entities, "None", StatusCodes.Status200OK, totalCountAndPages);
             return Ok(response);     
         }
         
         [HttpPost]
+        [Route("upsert")]
         public async Task<ActionResult> InsertnewJourney([FromBody] UpsertJourneyRequestDto upsertJourneyRequest)
         {
             await _journeyService.AddNewJourney(upsertJourneyRequest);
@@ -42,6 +35,7 @@ namespace PTP.Controllers
             return Ok();
         }
         [HttpPut]
+        [Route("upsert")]
         public async Task<ActionResult>UpdateJourney([FromBody] UpsertJourneyRequestDto updatedJourney)
         {
             await _journeyService.UpdateJourney(updatedJourney);
