@@ -121,7 +121,11 @@ namespace PTP.Migrations
                 values: new object[,]
                 {
                     { 1, 5000000, 2, 3, "A trip with company at ...", new DateTime(2023, 7, 11, 0, 0, 0, 0, DateTimeKind.Local), "Company Trip", "3,4", new DateTime(2023, 7, 6, 0, 0, 0, 0, DateTimeKind.Local), "Planning" },
-                    { 2, 4000000, 2, 3, "Đi chill cùng ae ...", new DateTime(2023, 7, 11, 0, 0, 0, 0, DateTimeKind.Local), "Đà Lạt Trip", "3,4", new DateTime(2023, 7, 6, 0, 0, 0, 0, DateTimeKind.Local), "Planning" }
+                    { 2, 4000000, 2, 3, "Đi chill cùng ae ...", new DateTime(2023, 7, 11, 0, 0, 0, 0, DateTimeKind.Local), "Đà Lạt Trip", "3,4", new DateTime(2023, 7, 6, 0, 0, 0, 0, DateTimeKind.Local), "Planning" },
+                    { 3, 4000000, 2, 3, "Đi chill cùng ae ...", new DateTime(2023, 7, 11, 0, 0, 0, 0, DateTimeKind.Local), "Đà Lạt Trip2", "3,4", new DateTime(2023, 7, 6, 0, 0, 0, 0, DateTimeKind.Local), "Planning" },
+                    { 4, 4000000, 2, 3, "Đi chill cùng ae ...", new DateTime(2023, 7, 11, 0, 0, 0, 0, DateTimeKind.Local), "Đà Lạt Trip3", "3,4", new DateTime(2023, 7, 6, 0, 0, 0, 0, DateTimeKind.Local), "Planning" },
+                    { 5, 4000000, 2, 3, "Đi chill cùng ae ...", new DateTime(2023, 7, 11, 0, 0, 0, 0, DateTimeKind.Local), "Đà Lạt Trip4", "3,4", new DateTime(2023, 7, 6, 0, 0, 0, 0, DateTimeKind.Local), "Planning" },
+                    { 6, 4000000, 2, 3, "Đi chill cùng ae ...", new DateTime(2023, 7, 11, 0, 0, 0, 0, DateTimeKind.Local), "Đà Lạt Trip5", "3,4", new DateTime(2023, 7, 6, 0, 0, 0, 0, DateTimeKind.Local), "Planning" }
                 });
 
             migrationBuilder.InsertData(

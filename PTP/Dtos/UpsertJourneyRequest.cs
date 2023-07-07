@@ -7,7 +7,7 @@
         public string Description { get; set; } = null!;
         public int CurrencyId { get; set; }
         public int CountryId { get; set; }
-        public string PlaceId { get; set; }
+        public string PlaceId { get; set; } = null!;
         public int Amount { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }

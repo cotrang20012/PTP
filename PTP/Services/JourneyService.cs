@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PTP.Core.Domain.Entities;
+using PTP.Core.Domain.Objects;
 using PTP.Core.Exceptions;
 using PTP.Core.Interfaces.Repositories;
 using PTP.Core.Interfaces.Services;
@@ -20,10 +21,48 @@ namespace PTP.Services
             return entity;
         }
 
-        public async Task<IEnumerable<Journey>?> GetAll(CancellationToken cancellationToken)
+        public async Task<IEnumerable<Journey>?> GetPagination(SearchJourneyRequest searchJourneyRequest,int pageNumber,int pageSize ,CancellationToken cancellationToken = default)
         {
-            var entity = await _journeyRepository.Get().Include(j => j.Country).Include(j => j.Currency)
-                .ToListAsync();
+            var journeyQuery = GetQueryable();
+            if (searchJourneyRequest.NameAndDescription != String.Empty)
+            {
+                journeyQuery.Where(x => x.Name.Contains(searchJourneyRequest.NameAndDescription) || x.Description.Contains(searchJourneyRequest.NameAndDescription));
+            }
+            if (searchJourneyRequest.CurrencyId != null && searchJourneyRequest.CurrencyId > 0)
+            {
+                journeyQuery.Where(x => x.CurrencyId == searchJourneyRequest.CurrencyId);
+            }
+            if (searchJourneyRequest.CountryId != null && searchJourneyRequest.CountryId > 0)
+            {
+                journeyQuery.Where(x => x.CountryId == searchJourneyRequest.CountryId);
+            }
+            if (searchJourneyRequest.FromAmount != null && searchJourneyRequest.FromAmount > 0)
+            {
+                journeyQuery.Where(x => x.Amount >= searchJourneyRequest.FromAmount);
+            }
+            if (searchJourneyRequest.ToAmount != null && searchJourneyRequest.ToAmount > 0 && searchJourneyRequest.ToAmount > searchJourneyRequest.FromAmount)
+            {
+                journeyQuery.Where(x => x.Amount <= searchJourneyRequest.ToAmount);
+            }
+            if (searchJourneyRequest.FromStartDate != null)
+            {
+                journeyQuery.Where(x => x.StartDate >= searchJourneyRequest.FromStartDate);
+            }
+            if (searchJourneyRequest.ToStartDate != null && searchJourneyRequest.ToStartDate >= searchJourneyRequest.FromStartDate)
+            {
+                journeyQuery.Where(x => x.StartDate <= searchJourneyRequest.ToStartDate);
+            }
+            if (searchJourneyRequest.FromEndDate != null)
+            {
+                journeyQuery.Where(x => x.EndDate >= searchJourneyRequest.FromEndDate);
+            }
+            if (searchJourneyRequest.ToEndDate != null && searchJourneyRequest.ToEndDate >= searchJourneyRequest.FromEndDate)
+            {
+                journeyQuery.Where(x => x.EndDate <= searchJourneyRequest.ToEndDate);
+            }
+     
+            var entity = await journeyQuery.Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize).Include(j => j.Country).Include(j => j.Currency).ToListAsync();
             return entity;
         }
 
@@ -74,11 +113,7 @@ namespace PTP.Services
             }
             await _journeyRepository.SaveChangesAsync();
         }
-        public async Task TestFunction()
-        {
-            
-        }
-
+        
         private void MapFromUpdateToEntity(Journey updatedJourney, Journey entity)
         {
             entity.Name = updatedJourney.Name;
@@ -96,6 +131,54 @@ namespace PTP.Services
         public IQueryable<Journey> GetQueryable()
         {
             return _journeyRepository.Get();
+        }
+
+        public async Task<int> CountAllJourney()
+        {
+            return await _journeyRepository.Get().CountAsync();
+        }
+
+        public async Task<IEnumerable<Journey>?> Search(SearchJourneyRequest searchJourneyRequest, CancellationToken cancellationToken = default)
+        {
+            var journeyQuery = GetQueryable();
+            if(searchJourneyRequest.NameAndDescription != String.Empty)
+            {
+                journeyQuery.Where(x => x.Name.Contains(searchJourneyRequest.NameAndDescription) || x.Description.Contains(searchJourneyRequest.NameAndDescription));
+            }
+            if(searchJourneyRequest.CurrencyId != null && searchJourneyRequest.CurrencyId > 0)
+            {
+                journeyQuery.Where(x => x.CurrencyId == searchJourneyRequest.CurrencyId);
+            }
+            if(searchJourneyRequest.CountryId != null && searchJourneyRequest.CountryId > 0)
+            {
+                journeyQuery.Where(x => x.CountryId == searchJourneyRequest.CountryId);
+            }
+            if(searchJourneyRequest.FromAmount != null && searchJourneyRequest.FromAmount > 0)
+            {
+                journeyQuery.Where(x => x.Amount >= searchJourneyRequest.FromAmount);
+            }
+            if(searchJourneyRequest.ToAmount != null && searchJourneyRequest.ToAmount > 0 && searchJourneyRequest.ToAmount > searchJourneyRequest.FromAmount)
+            {
+                journeyQuery.Where(x => x.Amount <= searchJourneyRequest.ToAmount);
+            }
+            if(searchJourneyRequest.FromStartDate != null)
+            {
+                journeyQuery.Where(x => x.StartDate >= searchJourneyRequest.FromStartDate);
+            }
+            if(searchJourneyRequest.ToStartDate != null && searchJourneyRequest.ToStartDate >= searchJourneyRequest.FromStartDate)
+            {
+                journeyQuery.Where(x => x.StartDate <= searchJourneyRequest.ToStartDate);
+            }
+            if (searchJourneyRequest.FromEndDate != null)
+            {
+                journeyQuery.Where(x => x.EndDate >= searchJourneyRequest.FromEndDate);
+            }
+            if (searchJourneyRequest.ToEndDate != null && searchJourneyRequest.ToEndDate >= searchJourneyRequest.FromEndDate)
+            {
+                journeyQuery.Where(x => x.EndDate <= searchJourneyRequest.ToEndDate);
+            }
+
+            return await journeyQuery.ToListAsync();
         }
     }
 }

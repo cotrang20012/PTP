@@ -1,20 +1,19 @@
 ﻿using PTP.Core.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using PTP.Core.Domain.Objects;
 
+ 
 namespace PTP.Core.Interfaces.Services
 {
     public interface IJourneyService
     {
         Task<Journey?> GetAsync(int id, CancellationToken cancellationToken = default);
-        Task<IEnumerable<Journey>?> GetAll(CancellationToken cancellationToken = default);
+        Task<IEnumerable<Journey>?> GetPagination(SearchJourneyRequest searchJourneyRequest,int pageNumber, int pageSize = 5,CancellationToken cancellationToken = default);
         Task AddNewJourney(Journey newJourney, CancellationToken cancellationToken = default);
         Task DeleteJourney(int id, CancellationToken cancellationToken = default);
         Task UpdateJourney(Journey updatedJourney, CancellationToken cancellationToken = default);
         Task RemovePlacesFromJourney(params int[] placeId);
-        Task TestFunction();
+        IQueryable<Journey> GetQueryable();
+        Task<int> CountAllJourney();
+        Task<IEnumerable<Journey>?> Search(SearchJourneyRequest searchJourneyRequest, CancellationToken cancellationToken = default);
     }
 }

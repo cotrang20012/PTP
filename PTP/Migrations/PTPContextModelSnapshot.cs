@@ -184,6 +184,58 @@ namespace PTP.Migrations
                             PlaceId = "3,4",
                             StartDate = new DateTime(2023, 7, 6, 0, 0, 0, 0, DateTimeKind.Local),
                             Status = "Planning"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Amount = 4000000,
+                            CountryId = 2,
+                            CurrencyId = 3,
+                            Description = "Đi chill cùng ae ...",
+                            EndDate = new DateTime(2023, 7, 11, 0, 0, 0, 0, DateTimeKind.Local),
+                            Name = "Đà Lạt Trip2",
+                            PlaceId = "3,4",
+                            StartDate = new DateTime(2023, 7, 6, 0, 0, 0, 0, DateTimeKind.Local),
+                            Status = "Planning"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Amount = 4000000,
+                            CountryId = 2,
+                            CurrencyId = 3,
+                            Description = "Đi chill cùng ae ...",
+                            EndDate = new DateTime(2023, 7, 11, 0, 0, 0, 0, DateTimeKind.Local),
+                            Name = "Đà Lạt Trip3",
+                            PlaceId = "3,4",
+                            StartDate = new DateTime(2023, 7, 6, 0, 0, 0, 0, DateTimeKind.Local),
+                            Status = "Planning"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Amount = 4000000,
+                            CountryId = 2,
+                            CurrencyId = 3,
+                            Description = "Đi chill cùng ae ...",
+                            EndDate = new DateTime(2023, 7, 11, 0, 0, 0, 0, DateTimeKind.Local),
+                            Name = "Đà Lạt Trip4",
+                            PlaceId = "3,4",
+                            StartDate = new DateTime(2023, 7, 6, 0, 0, 0, 0, DateTimeKind.Local),
+                            Status = "Planning"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Amount = 4000000,
+                            CountryId = 2,
+                            CurrencyId = 3,
+                            Description = "Đi chill cùng ae ...",
+                            EndDate = new DateTime(2023, 7, 11, 0, 0, 0, 0, DateTimeKind.Local),
+                            Name = "Đà Lạt Trip5",
+                            PlaceId = "3,4",
+                            StartDate = new DateTime(2023, 7, 6, 0, 0, 0, 0, DateTimeKind.Local),
+                            Status = "Planning"
                         });
                 });
 

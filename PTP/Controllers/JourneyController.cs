@@ -8,6 +8,8 @@ using EntityFramework.Exceptions.Common;
 using PTP.Core.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using PTP.Validator;
+using PTP.Core.Domain.Objects;
+using Azure;
 
 namespace PTP.Controllers
 {
@@ -18,25 +20,50 @@ namespace PTP.Controllers
         private readonly IJourneyService _journeyService;
         private readonly IMapper _mapper;
         private readonly IPlaceService _placeService;
-        public JourneyController(IJourneyService journeyService, IMapper mapper, IPlaceService placeService)
+        private readonly ICountryService _countryService;
+        private readonly ICurrencyService _currencyService;
+
+        public JourneyController(IJourneyService journeyService, IMapper mapper, IPlaceService placeService, ICountryService countryService, ICurrencyService currencyService)
         {
             _journeyService = journeyService;
             _mapper = mapper;
             _placeService = placeService;
+            _countryService = countryService;
+            _currencyService = currencyService;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<JourneyDto>> GetAll()
+        [HttpPost]
+        public async Task<ActionResult<JourneyDto>> GetAllPagination([FromBody]SearchJourneyRequest searchJourneyRequest,[FromQuery]int pageNumber = 1, int pageSize = 5)
         {
             try
             {
-                var entities = await _journeyService.GetAll();
+                var numberOfPage = 1;
+                var entities = await _journeyService.GetPagination(searchJourneyRequest: searchJourneyRequest,pageNumber: pageNumber,pageSize: pageSize);
+                var totalCount = entities.Count();
+
+                if(totalCount > 0)
+                { 
+                    numberOfPage = Convert.ToInt32(Math.Ceiling((double)(totalCount / pageSize)));
+                }
+
                 foreach(var entity in entities)
                 {
                     var places = await _placeService.GetQueryable().Where(x => entity.PlaceId.Contains(x.Id.ToString())).ToListAsync();
                     entity.Places = places;
                 }
-                return Ok(_mapper.Map<List<JourneyDto>>(entities));
+
+                var response = new PaginationResponse<List<JourneyDto>>
+                {
+                    Success = true,
+                    Message = "Get journey list successfully!!!",
+                    Data = _mapper.Map<List<JourneyDto>>(entities),
+                    ErrorMessage = "None",
+                    StatusCode = StatusCodes.Status200OK,
+                    TotalPage = numberOfPage,
+                    TotalCount = totalCount
+                };
+
+                return Ok(response);
             }
             catch (SqlException ex)
             {
@@ -58,20 +85,94 @@ namespace PTP.Controllers
 
                     if (!updateValidationResult.IsValid)
                     {
-                        return BadRequest(updateValidationResult.Errors);
+                        var response = new BaseResponse<Object>
+                        {
+                            Success = false,
+                            Message = "Update journey failed!!!",
+                            Data = null,
+                            ErrorMessage = updateValidationResult.Errors[0].ErrorMessage,
+                            StatusCode = StatusCodes.Status400BadRequest
+                        };
+                        return BadRequest(response);
                     }
-                    Journey newJourney = _mapper.Map<Journey>(upsertJourneyRequest);
 
+                    var currencyExist = await IsCurrencyExist(upsertJourneyRequest.CurrencyId);
+                    if (!currencyExist)
+                    {
+                        var response = new BaseResponse<Object>
+                        {
+                            Success = false,
+                            Message = "Update journey failed!!!",
+                            Data = null,
+                            ErrorMessage = "Currency doesn't exist, choose another currency",
+                            StatusCode = StatusCodes.Status400BadRequest
+                        };
+                        return BadRequest(response);
+                    }
+
+                    var countryExist = await IsCountryExist(upsertJourneyRequest.CountryId);
+                    if (!countryExist)
+                    {
+                        var response = new BaseResponse<Object>
+                        {
+                            Success = false,
+                            Message = "Update journey failed!!!",
+                            Data = null,
+                            ErrorMessage = "Country doesn't exist, choose another country",
+                            StatusCode = StatusCodes.Status400BadRequest
+                        };
+                        return BadRequest(response);
+                    }
+
+                    var placeExist = await ArePlacesExistInCountry(upsertJourneyRequest.CountryId, upsertJourneyRequest.PlaceId);
+                    if (!placeExist) 
+                    {
+                        var response = new BaseResponse<Object>
+                        {
+                            Success = false,
+                            Message = "Update journey failed!!!",
+                            Data = null,
+                            ErrorMessage = "Country doesn't contain those places, please choose another places",
+                            StatusCode = StatusCodes.Status400BadRequest
+                        };
+                        return BadRequest(response);
+                    }
+
+                    Journey newJourney = _mapper.Map<Journey>(upsertJourneyRequest);
                     await _journeyService.UpdateJourney(newJourney);
-                    return Ok("Update journey success");
+                    var successResponse = new BaseResponse<Object>
+                    {
+                        Success = true,
+                        Message = "Update journey successfully!!!",
+                        Data = null,
+                        ErrorMessage = "Update journey success",
+                        StatusCode = StatusCodes.Status200OK
+                    };
+                    return Ok(successResponse);
                 }
                 catch (JourneyNotFoundException)
                 {
-                    return BadRequest("Journey not found!!!");
+                    var response = new BaseResponse<Object>
+                    {
+                        Success = false,
+                        Message = "Update journey failed!!!",
+                        Data = null,
+                        ErrorMessage = "Journey not found!!!",
+                        StatusCode = StatusCodes.Status400BadRequest
+                    };
+                    return BadRequest(response);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    return Problem(detail: "Another user is currently update the same journey!!", statusCode: StatusCodes.Status500InternalServerError);
+                    var response = new BaseResponse<Object>
+                    {
+                        Success = false,
+                        Message = "Update journey failed!!!",
+                        Data = null,
+                        ErrorMessage = "Another user is currently update the same journey!!",
+                        StatusCode = StatusCodes.Status400BadRequest,
+                    };
+                    return BadRequest(response);
                 }
             }
             else
@@ -85,15 +186,82 @@ namespace PTP.Controllers
 
                     if (!insertValidationResult.IsValid)
                     {
-                        return BadRequest(insertValidationResult.Errors);
+                        var response = new BaseResponse<Object>
+                        {
+                            Success = false,
+                            Message = "Insert new journey failed!!!",
+                            Data = null,
+                            ErrorMessage = insertValidationResult.Errors[0].ErrorMessage,
+                            StatusCode = StatusCodes.Status400BadRequest
+                        };
+                        return BadRequest(response);
                     }
+
+                    var currencyExist = await IsCurrencyExist(upsertJourneyRequest.CurrencyId);
+                    if (!currencyExist)
+                    {
+                        var response = new BaseResponse<Object>
+                        {
+                            Success = false,
+                            Message = "Insert new journey failed!!!",
+                            Data = null,
+                            ErrorMessage = "Currency doesn't exist, choose another currency",
+                            StatusCode = StatusCodes.Status400BadRequest
+                        };
+                        return BadRequest(response);
+                    }
+
+                    var countryExist = await IsCountryExist(upsertJourneyRequest.CountryId); 
+                    if (!countryExist)
+                    {
+                        var response = new BaseResponse<Object>
+                        {
+                            Success = false,
+                            Message = "Insert new journey failed!!!",
+                            Data = null,
+                            ErrorMessage = "Country doesn't exist, choose another country",
+                            StatusCode = StatusCodes.Status400BadRequest
+                        };
+                        return BadRequest(response);
+                    }
+
+                    var placeExist = await ArePlacesExistInCountry(upsertJourneyRequest.CountryId, upsertJourneyRequest.PlaceId);
+                    if (!placeExist)
+                    {
+                        var response = new BaseResponse<Object>
+                        {
+                            Success = false,
+                            Message = "Insert new journey failed!!!",
+                            Data = null,
+                            ErrorMessage = "Country doesn't contain those places, please choose another places",
+                            StatusCode = StatusCodes.Status400BadRequest
+                        };
+                        return BadRequest(response);
+                    }
+
                     Journey newJourney = _mapper.Map<Journey>(upsertJourneyRequest);
                     await _journeyService.AddNewJourney(newJourney);
-                    return Ok("Insert new journey success");
+                    var successResponse = new BaseResponse<Object>
+                    {
+                        Success = true,
+                        Message = "Insert new journey success!!!",
+                        Data = null,
+                        ErrorMessage = "None",
+                        StatusCode = StatusCodes.Status200OK,
+                    };
+                    return Ok(successResponse);
                 }
                 catch (CannotInsertNullException)
                 {
-                    return BadRequest("Please fill all the field!!!");
+                    var response = new BaseResponse<Object>
+                    {
+                        Success = true,
+                        Message = "Insert new journey failed!!!",
+                        Data = null,
+                        ErrorMessage = "Please fill all the required field!!!",
+                        StatusCode = StatusCodes.Status400BadRequest,
+                    };
+                    return BadRequest(response);
                 }
             }
         }
@@ -104,16 +272,75 @@ namespace PTP.Controllers
             try
             {
                 await _journeyService.DeleteJourney(id);
-                return Ok("Delete journey success!!!");
+                var successResponse = new BaseResponse<Object>
+                {
+                    Success = true,
+                    Message = "Delete journey successfully!!!",
+                    Data = null,
+                    ErrorMessage = "None",
+                    StatusCode = StatusCodes.Status200OK,
+                };
+                return Ok(successResponse);
             }
             catch (JourneyNotFoundException)
-            { 
-                return BadRequest("Journey not found!!!");
+            {
+                var response = new BaseResponse<Object>
+                {
+                    Success = true,
+                    Message = "Delete journey failed!!!",
+                    Data = null,
+                    ErrorMessage = "Journey not found!!!",
+                    StatusCode = StatusCodes.Status400BadRequest,
+                };
+                return BadRequest(response);
             }
             catch (DbUpdateConcurrencyException)
             {
-                return Problem(detail: "The journey has already been deleted", statusCode: StatusCodes.Status500InternalServerError);
+                var response = new BaseResponse<Object>
+                {
+                    Success = true,
+                    Message = "Delete journey failed!!!",
+                    Data = null,
+                    ErrorMessage = "The journey has already been deleted",
+                    StatusCode = StatusCodes.Status400BadRequest,
+                };
+                return BadRequest(response);
             }
+        }
+
+        private async Task<bool> IsCurrencyExist(int currencyId)
+        {
+            var currency = await _currencyService.GetQueryable().Where(x => currencyId == x.Id).AsNoTracking().FirstOrDefaultAsync();
+            if (currency == default(Currency))
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private async Task<bool> IsCountryExist(int countryId)
+        {
+            var country = await _countryService.GetQueryable().Where(x => countryId == x.Id).AsNoTracking().FirstOrDefaultAsync();
+            if (country == default(Country))
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private async Task<bool> ArePlacesExistInCountry(int countryId, string places)
+        {
+            var country = await _countryService.GetQueryable().Where(x => countryId == x.Id).Include(c => c.Places).AsNoTracking().FirstOrDefaultAsync();
+            var placeIds = places.Split(",");
+            var placeIdsInCountry = country.Places.Select(c => c.Id).ToList();
+            foreach (var placeId in placeIds)
+            {
+                if (!placeIdsInCountry.Any(x => x.ToString() == placeId))
+                {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }

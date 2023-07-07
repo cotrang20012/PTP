@@ -11,6 +11,8 @@ namespace PTP.Repositories
         private readonly PTPContext _ptpContext;
         private readonly DbSet<T> _set;
 
+        public DbSet<T> DbSet {get { return _set;} }
+
         public Repository(PTPContext ptpContext)
         {
             _ptpContext = ptpContext;
