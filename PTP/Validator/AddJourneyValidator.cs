@@ -5,9 +5,9 @@ using System;
 
 namespace PTP.Validator
 {
-    public class AddJourneyValidator : AbstractValidator<UpsertJourneyRequestDto>
+    public class InsertNewJourneyValidator : AbstractValidator<UpsertJourneyRequestDto>
     {
-        public AddJourneyValidator() 
+        public InsertNewJourneyValidator() 
         {
             RuleFor(dto => dto.Name)
                 .NotEmpty().WithMessage("Journey name is required.");

@@ -16,7 +16,7 @@ namespace PTP.Services
             _countryRepository = countryService;
         }
 
-        public async Task AddNewCountry(Country newCountry, CancellationToken cancellationToken = default)
+        public async Task InsertNewCountry(Country newCountry, CancellationToken cancellationToken = default)
         {
             await _countryRepository.AddAsync(newCountry);
             await _countryRepository.SaveChangesAsync();
@@ -52,7 +52,7 @@ namespace PTP.Services
             return entity;
         }
 
-        public async Task<Country?> GetAsync(int id, CancellationToken cancellationToken = default)
+        public async Task<Country?> GetById(int id, CancellationToken cancellationToken = default)
         {
            return await _countryRepository.GetAsync(id, cancellationToken);
         }

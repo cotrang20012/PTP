@@ -6,7 +6,7 @@ namespace PTP.Core.Interfaces.Services
 {
     public interface IJourneyService
     {
-        Task<Journey?> GetAsync(int id, CancellationToken cancellationToken = default);
+        Task<Journey?> GetById(int id, CancellationToken cancellationToken = default);
         Task<IEnumerable<Journey>?> GetSearchJourneyPagination(SearchJourneyRequestDto searchJourneyRequest,TotalCountAndPages totalCountAndPages,int pageNumber, int pageSize = 5,CancellationToken cancellationToken = default);
         Task InsertNewJourney(UpsertJourneyRequestDto newJourney, CancellationToken cancellationToken = default);
         Task DeleteJourney(int id, CancellationToken cancellationToken = default);

@@ -26,7 +26,7 @@ namespace PTP.Services
             _mapper = mapper;
         }
 
-        public async Task<Journey?> GetAsync(int id, CancellationToken cancellationToken)
+        public async Task<Journey?> GetById(int id, CancellationToken cancellationToken)
         {
             var entity = await _journeyRepository.GetAsync(id, cancellationToken);
             return entity;
@@ -100,7 +100,7 @@ namespace PTP.Services
         {
             newJourney.EndDate = newJourney.EndDate.Date;
             newJourney.StartDate = newJourney.StartDate.Date;
-            var insertValidator = new AddJourneyValidator();
+            var insertValidator = new InsertNewJourneyValidator();
             var insertValidationResult = insertValidator.Validate(newJourney);
             if (!insertValidationResult.IsValid)
             {

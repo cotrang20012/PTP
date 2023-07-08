@@ -16,7 +16,7 @@ namespace PTP.Services
             _currencyRepository = currencyRepository;
         }
 
-        public async Task AddNewCurrency(Currency newCurrency, CancellationToken cancellationToken = default)
+        public async Task InsertNewCurrency(Currency newCurrency, CancellationToken cancellationToken = default)
         {
             await _currencyRepository.AddAsync(newCurrency);
             await _currencyRepository.SaveChangesAsync();
@@ -53,7 +53,7 @@ namespace PTP.Services
             return entity;
         }
 
-        public async Task<Currency?> GetAsync(int id, CancellationToken cancellationToken = default)
+        public async Task<Currency?> GetById(int id, CancellationToken cancellationToken = default)
         {
             return await _currencyRepository.GetAsync(id, cancellationToken);
         }

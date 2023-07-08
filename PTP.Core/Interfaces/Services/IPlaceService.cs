@@ -11,9 +11,9 @@ namespace PTP.Core.Interfaces.Services
 {
     public interface IPlaceService
     {
-        Task<Place?> GetAsync(int id, CancellationToken cancellationToken = default);
+        Task<Place?> GetById(int id, CancellationToken cancellationToken = default);
         Task<IEnumerable<Place>?> GetAll(CancellationToken cancellationToken = default);
-        Task AddNewPlace(UpsertPlaceRequestDto newPlace, CancellationToken cancellationToken = default);
+        Task InsertNewPlace(UpsertPlaceRequestDto newPlace, CancellationToken cancellationToken = default);
         Task DeletePlace(int id, CancellationToken cancellationToken = default);
         Task UpdatePlace(UpsertPlaceRequestDto updatedPlace, CancellationToken cancellationToken = default);
         BaseResponse CreateBaseResponse(bool responseState, string responseMessage, Object responseData, string respsoneErrorMessage, int responseStatusCode);

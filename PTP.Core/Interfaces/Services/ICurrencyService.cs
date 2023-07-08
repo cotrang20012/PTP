@@ -10,9 +10,9 @@ namespace PTP.Core.Interfaces.Services
 {
     public interface ICurrencyService
     {
-        Task<Currency?> GetAsync(int id, CancellationToken cancellationToken = default);
+        Task<Currency?> GetById(int id, CancellationToken cancellationToken = default);
         Task<IEnumerable<Currency>?> GetAll(CancellationToken cancellationToken = default);
-        Task AddNewCurrency(Currency newCurrency, CancellationToken cancellationToken = default);
+        Task InsertNewCurrency(Currency newCurrency, CancellationToken cancellationToken = default);
         Task DeleteCurrency(int id, CancellationToken cancellationToken = default);
         Task UpdateCurrency(Currency updatedCurrency, CancellationToken cancellationToken = default);
         BaseResponse CreateBaseResponse(bool responseState, string responseMessage, Object responseData, string respsoneErrorMessage, int responseStatusCode);

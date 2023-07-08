@@ -28,7 +28,7 @@ namespace PTP.Controllers
         [HttpPut]
         public async Task<ActionResult> AddPlace([FromBody]UpsertPlaceRequestDto upsertPlaceRequest)
         {
-            await _placeService.AddNewPlace(upsertPlaceRequest);
+            await _placeService.InsertNewPlace(upsertPlaceRequest);
             var response = _placeService.CreateBaseResponse(true, "Insert new place succes", null, "None", StatusCodes.Status200OK);
             return Ok(response);
         }

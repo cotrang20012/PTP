@@ -28,7 +28,7 @@ namespace PTP.Services
             _journeyRepository = journeyRepository;
         }
 
-        public async Task AddNewPlace(UpsertPlaceRequestDto newPlace, CancellationToken cancellationToken = default)
+        public async Task InsertNewPlace(UpsertPlaceRequestDto newPlace, CancellationToken cancellationToken = default)
         {
             var addValidator = new AddPlaceValidator();
             var addValidationResult = addValidator.Validate(newPlace);
@@ -85,7 +85,7 @@ namespace PTP.Services
             return entity;
         }
 
-        public async Task<Place?> GetAsync(int id, CancellationToken cancellationToken = default)
+        public async Task<Place?> GetById(int id, CancellationToken cancellationToken = default)
         {
             return await _placeRepository.GetAsync(id, cancellationToken);
         }
