@@ -12,11 +12,11 @@ namespace PTP.Core.Dtos
         public string Name { get; set; } = null!;
         public string Description { get; set; } = null!;
         public int CurrencyId { get; set; }
-        public string CurrencyName { get; set; }   
+        public string CurrencyName { get; set; } = null!;
         public int CountryId { get; set; }
-        public string CountryName { get; set; }
+        public string CountryName { get; set; } = null!;
         public string PlaceId { get; set; } = null!;
-        public string PlaceName { get; set; }
+        public string PlaceName { get; set; } = null!;
         public int Amount { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }

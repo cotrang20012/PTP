@@ -106,7 +106,7 @@ namespace PTP.Services
             {
                 throw new BadUserInputException(insertValidationResult.Errors[0].ErrorMessage);
             }
-            ValidateUpsertJourneyRequest(newJourney);
+            await ValidateUpsertJourneyRequest(newJourney);
             var entity = _mapper.Map<Journey>(newJourney);
             await _journeyRepository.AddAsync(entity);
             await _journeyRepository.SaveChangesAsync();
