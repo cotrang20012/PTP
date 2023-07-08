@@ -17,13 +17,15 @@ namespace PTP.Services
         private readonly IRepository<Place> _placeRepository;
         private readonly IJourneyService _journeyService;
         private readonly IRepository<Country> _countryRepository;
+        private readonly IRepository<Journey> _journeyRepository;
         private readonly IMapper _mapper;
-        public PlaceService(IRepository<Place> placeRepository, IJourneyService journeyService, IRepository<Country> countryRepository,IMapper mapper)
+        public PlaceService(IRepository<Place> placeRepository, IJourneyService journeyService, IRepository<Country> countryRepository,IMapper mapper, IRepository<Journey> journeyRepository)
         {
             _placeRepository = placeRepository;
             _journeyService = journeyService;
             _countryRepository = countryRepository;
             _mapper = mapper;
+            _journeyRepository = journeyRepository;
         }
 
         public async Task AddNewPlace(UpsertPlaceRequestDto newPlace, CancellationToken cancellationToken = default)
@@ -61,7 +63,19 @@ namespace PTP.Services
             }
 
             _placeRepository.Delete(entity);
-            await _journeyService.RemovePlacesFromJourney(entity.Id);
+         
+            var journeyEntities = await _journeyRepository.Get().Where(j => j.PlaceId.Contains(entity.Id.ToString())).ToListAsync();
+            foreach (var journeyEntity in journeyEntities)
+            {
+                var placeString = journeyEntity.PlaceId;
+                var placeArrayString = placeString.Split(',');
+                var placeIdToRemove = entity.Id.ToString();
+                var placeStringAfterRemove = placeArrayString.Where(id => id != placeIdToRemove).ToArray();
+                var newPlaceString = string.Join(",", placeStringAfterRemove);
+                journeyEntity.PlaceId = newPlaceString;
+            }
+ 
+            await _journeyRepository.SaveChangesAsync();
             await _placeRepository.SaveChangesAsync();
         }
 

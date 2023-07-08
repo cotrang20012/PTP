@@ -96,7 +96,7 @@ namespace PTP.Services
             return entities;
         }
 
-        public async Task AddNewJourney(UpsertJourneyRequestDto newJourney, CancellationToken cancellationToken = default)
+        public async Task InsertNewJourney(UpsertJourneyRequestDto newJourney, CancellationToken cancellationToken = default)
         {
             newJourney.EndDate = newJourney.EndDate.Date;
             newJourney.StartDate = newJourney.StartDate.Date;
@@ -143,24 +143,6 @@ namespace PTP.Services
             var entity = await _journeyRepository.GetAsync((int)updatedJourney.Id);
             entity = _mapper.Map<Journey>(updatedJourney);
             _journeyRepository.Update(entity);
-            await _journeyRepository.SaveChangesAsync();
-        }
-
-        public async Task RemovePlacesFromJourney(params int[] placeId)
-        {
-            foreach(var place in placeId)
-            {
-                var entities = await _journeyRepository.Get().Where(j => j.PlaceId.Contains(place.ToString())).ToListAsync();
-                foreach(var entity in entities)
-                {
-                    var placeString = entity.PlaceId;
-                    var placeStringId = placeString.Split(',');
-                    var placeIdToRemove = place.ToString();
-                    var placeStringAfterRemove = placeStringId.Where(id => id != placeIdToRemove).ToArray();
-                    var newPlaceString = string.Join(",", placeStringAfterRemove);
-                    entity.PlaceId = newPlaceString;
-                }
-            }
             await _journeyRepository.SaveChangesAsync();
         }
 

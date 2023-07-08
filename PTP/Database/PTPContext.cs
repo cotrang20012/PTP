@@ -11,14 +11,11 @@ namespace PTP.Database
         public DbSet<Currency> Currencies { get; set; } = null!;
         public DbSet<Country> Countries { get; set; } = null!;
         public DbSet<Place> Places { get; set; } = null!;
-        public PTPContext(DbContextOptions<PTPContext> options) : base(options) { }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+
+        public DbContextOptions _options;
+        public PTPContext(DbContextOptions<PTPContext> options) : base(options) 
         {
-            base.OnConfiguring(optionsBuilder);
-            optionsBuilder
- //               .LogTo(Console.WriteLine)
-                .UseSqlServer(@"Data Source=localhost; Initial Catalog=PTP;TrustServerCertificate=true; Integrated Security=True;")
-                .UseExceptionProcessor();
+            _options = options;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -27,9 +24,9 @@ namespace PTP.Database
             //Set delete behavior
 
             //model seeding for country
-            modelBuilder.Entity<Country>().HasData(new Country() {Id = 1, Name = "USA"});
-            modelBuilder.Entity<Country>().HasData(new Country() {Id = 2, Name = "Viet Nam" });
-            modelBuilder.Entity<Country>().HasData(new Country() {Id = 3, Name = "Switzerland" });
+            modelBuilder.Entity<Country>().HasData(new Country() { Id = 1, Name = "USA" });
+            modelBuilder.Entity<Country>().HasData(new Country() { Id = 2, Name = "Viet Nam" });
+            modelBuilder.Entity<Country>().HasData(new Country() { Id = 3, Name = "Switzerland" });
 
             //model seeding for Places
             modelBuilder.Entity<Place>().HasData(new Place() { Id = 1, Name = "Arizona", CountryId = 1 });
@@ -45,12 +42,13 @@ namespace PTP.Database
             modelBuilder.Entity<Currency>().HasData(new Currency() { Id = 3, Name = "VND" });
 
             //model seeding for journey 
-            modelBuilder.Entity<Journey>().HasData(new Journey() { Id = 1, Name = "Company Trip", Description = "A trip with company at ...", CountryId = 2, PlaceId ="3", CurrencyId = 3, Amount = 5000000, Status = JourneyStatus.Planning.ToString(), StartDate = DateTime.Now.Date, EndDate = DateTime.Now.AddDays(5).Date, Days = 5,Nights = 4 });
+            modelBuilder.Entity<Journey>().HasData(new Journey() { Id = 1, Name = "Company Trip", Description = "A trip with company at ...", CountryId = 2, PlaceId = "3", CurrencyId = 3, Amount = 5000000, Status = JourneyStatus.Planning.ToString(), StartDate = DateTime.Now.Date, EndDate = DateTime.Now.AddDays(5).Date, Days = 5, Nights = 4 });
             modelBuilder.Entity<Journey>().HasData(new Journey() { Id = 2, Name = "Đà Lạt Trip", Description = "Đi chill cùng ae ...", CountryId = 2, PlaceId = "3,4", CurrencyId = 3, Amount = 4000000, Status = JourneyStatus.Planning.ToString(), StartDate = DateTime.Now.Date, EndDate = DateTime.Now.AddDays(5).Date, Days = 5, Nights = 4 });
             modelBuilder.Entity<Journey>().HasData(new Journey() { Id = 3, Name = "Đà Lạt Trip2", Description = "Đi chill cùng ae ...", CountryId = 2, PlaceId = "3,4", CurrencyId = 3, Amount = 4000000, Status = JourneyStatus.Planning.ToString(), StartDate = DateTime.Now.Date, EndDate = DateTime.Now.AddDays(5).Date, Days = 5, Nights = 4 });
-            modelBuilder.Entity<Journey>().HasData(new Journey() {Id = 4, Name = "Đà Lạt Trip3", Description = "Đi chill cùng ae ...", CountryId = 2, PlaceId = "3", CurrencyId = 3, Amount = 4000000, Status = JourneyStatus.Planning.ToString(), StartDate = DateTime.Now.Date, EndDate = DateTime.Now.AddDays(5).Date, Days = 5, Nights = 4 });
-            modelBuilder.Entity<Journey>().HasData(new Journey() {Id = 5, Name = "Đà Lạt Trip4", Description = "Đi chill cùng ae ...", CountryId = 2, PlaceId = "3,4", CurrencyId = 3, Amount = 4000000, Status = JourneyStatus.Planning.ToString(), StartDate = DateTime.Now.Date, EndDate = DateTime.Now.AddDays(5).Date, Days = 5, Nights = 4 });
-            modelBuilder.Entity<Journey>().HasData(new Journey() {Id = 6, Name = "Đà Lạt Trip5", Description = "Đi chill cùng ae ...", CountryId = 2, PlaceId = "4", CurrencyId = 3, Amount = 4000000, Status = JourneyStatus.Planning.ToString(), StartDate = DateTime.Now.Date, EndDate = DateTime.Now.AddDays(5).Date, Days = 5, Nights = 4 });
+            modelBuilder.Entity<Journey>().HasData(new Journey() { Id = 4, Name = "Đà Lạt Trip3", Description = "Đi chill cùng ae ...", CountryId = 2, PlaceId = "3", CurrencyId = 3, Amount = 4000000, Status = JourneyStatus.Planning.ToString(), StartDate = DateTime.Now.Date, EndDate = DateTime.Now.AddDays(5).Date, Days = 5, Nights = 4 });
+            modelBuilder.Entity<Journey>().HasData(new Journey() { Id = 5, Name = "Đà Lạt Trip4", Description = "Đi chill cùng ae ...", CountryId = 2, PlaceId = "3,4", CurrencyId = 3, Amount = 4000000, Status = JourneyStatus.Planning.ToString(), StartDate = DateTime.Now.Date, EndDate = DateTime.Now.AddDays(5).Date, Days = 5, Nights = 4 });
+            modelBuilder.Entity<Journey>().HasData(new Journey() { Id = 6, Name = "Đà Lạt Trip5", Description = "Đi chill cùng ae ...", CountryId = 2, PlaceId = "4", CurrencyId = 3, Amount = 4000000, Status = JourneyStatus.Planning.ToString(), StartDate = DateTime.Now.Date, EndDate = DateTime.Now.AddDays(5).Date, Days = 5, Nights = 4 });
+            
         }
     }
 }

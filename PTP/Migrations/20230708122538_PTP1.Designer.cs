@@ -12,7 +12,7 @@ using PTP.Database;
 namespace PTP.Migrations
 {
     [DbContext(typeof(PTPContext))]
-    [Migration("20230707042831_PTP1")]
+    [Migration("20230708122538_PTP1")]
     partial class PTP1
     {
         /// <inheritdoc />
@@ -176,11 +176,11 @@ namespace PTP.Migrations
                             CurrencyId = 3,
                             Days = 5,
                             Description = "A trip with company at ...",
-                            EndDate = new DateTime(2023, 7, 12, 0, 0, 0, 0, DateTimeKind.Local),
+                            EndDate = new DateTime(2023, 7, 13, 0, 0, 0, 0, DateTimeKind.Local),
                             Name = "Company Trip",
                             Nights = 4,
                             PlaceId = "3",
-                            StartDate = new DateTime(2023, 7, 7, 0, 0, 0, 0, DateTimeKind.Local),
+                            StartDate = new DateTime(2023, 7, 8, 0, 0, 0, 0, DateTimeKind.Local),
                             Status = "Planning"
                         },
                         new
@@ -191,11 +191,11 @@ namespace PTP.Migrations
                             CurrencyId = 3,
                             Days = 5,
                             Description = "Đi chill cùng ae ...",
-                            EndDate = new DateTime(2023, 7, 12, 0, 0, 0, 0, DateTimeKind.Local),
+                            EndDate = new DateTime(2023, 7, 13, 0, 0, 0, 0, DateTimeKind.Local),
                             Name = "Đà Lạt Trip",
                             Nights = 4,
                             PlaceId = "3,4",
-                            StartDate = new DateTime(2023, 7, 7, 0, 0, 0, 0, DateTimeKind.Local),
+                            StartDate = new DateTime(2023, 7, 8, 0, 0, 0, 0, DateTimeKind.Local),
                             Status = "Planning"
                         },
                         new
@@ -206,11 +206,11 @@ namespace PTP.Migrations
                             CurrencyId = 3,
                             Days = 5,
                             Description = "Đi chill cùng ae ...",
-                            EndDate = new DateTime(2023, 7, 12, 0, 0, 0, 0, DateTimeKind.Local),
+                            EndDate = new DateTime(2023, 7, 13, 0, 0, 0, 0, DateTimeKind.Local),
                             Name = "Đà Lạt Trip2",
                             Nights = 4,
                             PlaceId = "3,4",
-                            StartDate = new DateTime(2023, 7, 7, 0, 0, 0, 0, DateTimeKind.Local),
+                            StartDate = new DateTime(2023, 7, 8, 0, 0, 0, 0, DateTimeKind.Local),
                             Status = "Planning"
                         },
                         new
@@ -221,11 +221,11 @@ namespace PTP.Migrations
                             CurrencyId = 3,
                             Days = 5,
                             Description = "Đi chill cùng ae ...",
-                            EndDate = new DateTime(2023, 7, 12, 0, 0, 0, 0, DateTimeKind.Local),
+                            EndDate = new DateTime(2023, 7, 13, 0, 0, 0, 0, DateTimeKind.Local),
                             Name = "Đà Lạt Trip3",
                             Nights = 4,
                             PlaceId = "3",
-                            StartDate = new DateTime(2023, 7, 7, 0, 0, 0, 0, DateTimeKind.Local),
+                            StartDate = new DateTime(2023, 7, 8, 0, 0, 0, 0, DateTimeKind.Local),
                             Status = "Planning"
                         },
                         new
@@ -236,11 +236,11 @@ namespace PTP.Migrations
                             CurrencyId = 3,
                             Days = 5,
                             Description = "Đi chill cùng ae ...",
-                            EndDate = new DateTime(2023, 7, 12, 0, 0, 0, 0, DateTimeKind.Local),
+                            EndDate = new DateTime(2023, 7, 13, 0, 0, 0, 0, DateTimeKind.Local),
                             Name = "Đà Lạt Trip4",
                             Nights = 4,
                             PlaceId = "3,4",
-                            StartDate = new DateTime(2023, 7, 7, 0, 0, 0, 0, DateTimeKind.Local),
+                            StartDate = new DateTime(2023, 7, 8, 0, 0, 0, 0, DateTimeKind.Local),
                             Status = "Planning"
                         },
                         new
@@ -251,11 +251,11 @@ namespace PTP.Migrations
                             CurrencyId = 3,
                             Days = 5,
                             Description = "Đi chill cùng ae ...",
-                            EndDate = new DateTime(2023, 7, 12, 0, 0, 0, 0, DateTimeKind.Local),
+                            EndDate = new DateTime(2023, 7, 13, 0, 0, 0, 0, DateTimeKind.Local),
                             Name = "Đà Lạt Trip5",
                             Nights = 4,
                             PlaceId = "4",
-                            StartDate = new DateTime(2023, 7, 7, 0, 0, 0, 0, DateTimeKind.Local),
+                            StartDate = new DateTime(2023, 7, 8, 0, 0, 0, 0, DateTimeKind.Local),
                             Status = "Planning"
                         });
                 });

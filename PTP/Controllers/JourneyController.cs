@@ -28,9 +28,9 @@ namespace PTP.Controllers
         
         [HttpPost]
         [Route("upsert")]
-        public async Task<ActionResult> InsertnewJourney([FromBody] UpsertJourneyRequestDto upsertJourneyRequest)
+        public async Task<ActionResult> InsertNewJourney([FromBody] UpsertJourneyRequestDto upsertJourneyRequest)
         {
-            await _journeyService.AddNewJourney(upsertJourneyRequest);
+            await _journeyService.InsertNewJourney(upsertJourneyRequest);
             var response = _journeyService.CreateBaseResponse(true, "Insert new journey success", null, "None", StatusCodes.Status200OK);
             return Ok();
         }

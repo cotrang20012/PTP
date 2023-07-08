@@ -122,12 +122,12 @@ namespace PTP.Migrations
                 columns: new[] { "Id", "Amount", "CountryId", "CurrencyId", "Days", "Description", "EndDate", "Name", "Nights", "PlaceId", "StartDate", "Status" },
                 values: new object[,]
                 {
-                    { 1, 5000000, 2, 3, 5, "A trip with company at ...", new DateTime(2023, 7, 12, 0, 0, 0, 0, DateTimeKind.Local), "Company Trip", 4, "3", new DateTime(2023, 7, 7, 0, 0, 0, 0, DateTimeKind.Local), "Planning" },
-                    { 2, 4000000, 2, 3, 5, "Đi chill cùng ae ...", new DateTime(2023, 7, 12, 0, 0, 0, 0, DateTimeKind.Local), "Đà Lạt Trip", 4, "3,4", new DateTime(2023, 7, 7, 0, 0, 0, 0, DateTimeKind.Local), "Planning" },
-                    { 3, 4000000, 2, 3, 5, "Đi chill cùng ae ...", new DateTime(2023, 7, 12, 0, 0, 0, 0, DateTimeKind.Local), "Đà Lạt Trip2", 4, "3,4", new DateTime(2023, 7, 7, 0, 0, 0, 0, DateTimeKind.Local), "Planning" },
-                    { 4, 4000000, 2, 3, 5, "Đi chill cùng ae ...", new DateTime(2023, 7, 12, 0, 0, 0, 0, DateTimeKind.Local), "Đà Lạt Trip3", 4, "3", new DateTime(2023, 7, 7, 0, 0, 0, 0, DateTimeKind.Local), "Planning" },
-                    { 5, 4000000, 2, 3, 5, "Đi chill cùng ae ...", new DateTime(2023, 7, 12, 0, 0, 0, 0, DateTimeKind.Local), "Đà Lạt Trip4", 4, "3,4", new DateTime(2023, 7, 7, 0, 0, 0, 0, DateTimeKind.Local), "Planning" },
-                    { 6, 4000000, 2, 3, 5, "Đi chill cùng ae ...", new DateTime(2023, 7, 12, 0, 0, 0, 0, DateTimeKind.Local), "Đà Lạt Trip5", 4, "4", new DateTime(2023, 7, 7, 0, 0, 0, 0, DateTimeKind.Local), "Planning" }
+                    { 1, 5000000, 2, 3, 5, "A trip with company at ...", new DateTime(2023, 7, 13, 0, 0, 0, 0, DateTimeKind.Local), "Company Trip", 4, "3", new DateTime(2023, 7, 8, 0, 0, 0, 0, DateTimeKind.Local), "Planning" },
+                    { 2, 4000000, 2, 3, 5, "Đi chill cùng ae ...", new DateTime(2023, 7, 13, 0, 0, 0, 0, DateTimeKind.Local), "Đà Lạt Trip", 4, "3,4", new DateTime(2023, 7, 8, 0, 0, 0, 0, DateTimeKind.Local), "Planning" },
+                    { 3, 4000000, 2, 3, 5, "Đi chill cùng ae ...", new DateTime(2023, 7, 13, 0, 0, 0, 0, DateTimeKind.Local), "Đà Lạt Trip2", 4, "3,4", new DateTime(2023, 7, 8, 0, 0, 0, 0, DateTimeKind.Local), "Planning" },
+                    { 4, 4000000, 2, 3, 5, "Đi chill cùng ae ...", new DateTime(2023, 7, 13, 0, 0, 0, 0, DateTimeKind.Local), "Đà Lạt Trip3", 4, "3", new DateTime(2023, 7, 8, 0, 0, 0, 0, DateTimeKind.Local), "Planning" },
+                    { 5, 4000000, 2, 3, 5, "Đi chill cùng ae ...", new DateTime(2023, 7, 13, 0, 0, 0, 0, DateTimeKind.Local), "Đà Lạt Trip4", 4, "3,4", new DateTime(2023, 7, 8, 0, 0, 0, 0, DateTimeKind.Local), "Planning" },
+                    { 6, 4000000, 2, 3, 5, "Đi chill cùng ae ...", new DateTime(2023, 7, 13, 0, 0, 0, 0, DateTimeKind.Local), "Đà Lạt Trip5", 4, "4", new DateTime(2023, 7, 8, 0, 0, 0, 0, DateTimeKind.Local), "Planning" }
                 });
 
             migrationBuilder.InsertData(

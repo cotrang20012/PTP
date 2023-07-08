@@ -8,7 +8,7 @@ namespace PTP.Core.Interfaces.Repositories
         IQueryable<T> Get();
         Task<T?> GetAsync(int id, CancellationToken cancellationToken = default);
         Task<T?> GetAsyncNoTracking(int id, CancellationToken cancellationToken = default);
-        Task<IEnumerable<T>?> GetAllAsyncNoTracking(int id, CancellationToken cancellationToken = default);
+        Task<IEnumerable<T>?> GetAllAsyncNoTracking(CancellationToken cancellationToken = default);
         Task AddRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default);
         Task AddAsync(T entity, CancellationToken cancellationToken = default);
         void Delete(params T[] entities);

@@ -68,7 +68,7 @@ namespace PTP.Repositories
             return await Get().AsNoTracking().SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
 
-        public async Task<IEnumerable<T>?> GetAllAsyncNoTracking(int id, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<T>?> GetAllAsyncNoTracking(CancellationToken cancellationToken = default)
         {
             return await Get().AsNoTracking().ToListAsync(cancellationToken);
         }

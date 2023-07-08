@@ -1,4 +1,6 @@
+using EntityFramework.Exceptions.SqlServer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using PTP.Database;
 using PTP.Extensions;
@@ -24,8 +26,9 @@ namespace PTP
             });
 
             builder.Services.AddControllers().AddNewtonsoftJson(options =>  options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
-           
-            builder.Services.AddDbContext<PTPContext>();
+  
+            builder.Services.AddDbContext<PTPContext>(
+                Options => Options.UseSqlServer(@"Data Source=localhost; Initial Catalog=PTP;TrustServerCertificate=true; Integrated Security=True;").UseExceptionProcessor());
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -36,8 +39,6 @@ namespace PTP
             builder.Services.Register();
 
             var app = builder.Build();
-
-            EnsureMigrate(app);
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -55,11 +56,5 @@ namespace PTP
             app.Run();
         }
 
-        private static void EnsureMigrate(WebApplication webApp)
-        {
-            using var scope = webApp.Services.CreateScope();
-            var ptpContext = scope.ServiceProvider.GetRequiredService<PTPContext>();
-            ptpContext.Database.Migrate();
-        }
     }
 }
