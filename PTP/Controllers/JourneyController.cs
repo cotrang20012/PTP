@@ -32,7 +32,7 @@ namespace PTP.Controllers
         {
             await _journeyService.InsertNewJourney(upsertJourneyRequest);
             var response = _journeyService.CreateBaseResponse(true, "Insert new journey success", null, "None", StatusCodes.Status200OK);
-            return Ok();
+            return Ok(response);
         }
         [HttpPut]
         [Route("upsert")]

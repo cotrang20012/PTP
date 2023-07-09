@@ -21,7 +21,7 @@ namespace PTP.Test
 
             Assert.IsTrue(insertValidationResult.IsValid);
         }
-        public void InsertNewJourneyValidatorTest_UnvalidRequest()
+        public void InsertNewJourneyValidatorTest_InvalidRequest()
         {
             UpsertJourneyRequestDto upsertJourneyRequest = new UpsertJourneyRequestDto() { Description = "Short trip", CountryId = 2, PlaceId = "3", Amount = 5000000, Status = JourneyStatus.Planning.ToString(), StartDate = DateTime.Now.Date.AddDays(5).Date, EndDate = DateTime.Now, Days = 5, Nights = 4 };
             upsertJourneyRequest.EndDate = upsertJourneyRequest.EndDate.Date;
@@ -76,7 +76,7 @@ namespace PTP.Test
             Assert.Pass();
         }
         [Test]
-        public void UpdateJourneyValidator_UnvalidRequest()
+        public void UpdateJourneyValidator_InvalidRequest()
         {
             Assert.Pass();
         }
