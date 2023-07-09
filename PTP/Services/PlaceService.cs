@@ -75,7 +75,6 @@ namespace PTP.Services
                 journeyEntity.PlaceId = newPlaceString;
             }
  
-            await _journeyRepository.SaveChangesAsync();
             await _placeRepository.SaveChangesAsync();
         }
 
