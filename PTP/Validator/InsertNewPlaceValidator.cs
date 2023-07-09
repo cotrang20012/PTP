@@ -3,9 +3,9 @@ using PTP.Core.Dtos;
 
 namespace PTP.Validator
 {
-    public class AddPlaceValidator : AbstractValidator<UpsertPlaceRequestDto>
+    public class InsertNewPlaceValidator : AbstractValidator<UpsertPlaceRequestDto>
     {
-        public AddPlaceValidator() 
+        public InsertNewPlaceValidator() 
         { 
             RuleFor(dto => dto.Name)
                 .NotEmpty().WithMessage("Place need to have a name");

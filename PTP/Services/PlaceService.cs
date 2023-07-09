@@ -30,7 +30,7 @@ namespace PTP.Services
 
         public async Task InsertNewPlace(UpsertPlaceRequestDto newPlace, CancellationToken cancellationToken = default)
         {
-            var addValidator = new AddPlaceValidator();
+            var addValidator = new InsertNewPlaceValidator();
             var addValidationResult = addValidator.Validate(newPlace);
             if (!addValidationResult.IsValid)
             {
