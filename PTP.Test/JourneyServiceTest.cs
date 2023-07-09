@@ -71,22 +71,36 @@ namespace PTP.Test
             Assert.AreEqual(default(Journey), journeyEntity);  
         }
         [Test]
-        public void UpdateJourneyValidator_ValidRequest()
+        public void UpdateJourneyValidatorTest_ValidRequest()
+        {
+            UpsertJourneyRequestDto upsertJourneyRequest = new UpsertJourneyRequestDto() {Id = 1 ,Name = "Company Trip", Description = "A trip with company at ...", CountryId = 2, CountryName = "Viet Nam", PlaceId = "3", PlaceName = "Đà Nẵng", CurrencyId = 3, CurrencyName = "VND", Amount = 5000000, Status = JourneyStatus.Planning.ToString(), StartDate = DateTime.Now.Date, EndDate = DateTime.Now.AddDays(5).Date, Days = 5, Nights = 4, Version = Array.Empty<byte>()};
+            upsertJourneyRequest.EndDate = upsertJourneyRequest.EndDate.Date;
+            upsertJourneyRequest.StartDate = upsertJourneyRequest.StartDate.Date;
+            var updateValidator = new UpdateJourneyValidator();
+
+            var updateValidationResult = updateValidator.Validate(upsertJourneyRequest);
+
+            Assert.IsTrue(updateValidationResult.IsValid);
+        }
+        [Test]
+        public void UpdateJourneyValidatorTest_InvalidRequest()
+        {
+            UpsertJourneyRequestDto upsertJourneyRequest = new UpsertJourneyRequestDto() { Description = "Short trip", CountryId = 2, PlaceId = "3", Amount = 5000000, Status = JourneyStatus.Planning.ToString(), StartDate = DateTime.Now.Date.AddDays(5).Date, EndDate = DateTime.Now, Days = 5, Nights = 4 };
+            upsertJourneyRequest.EndDate = upsertJourneyRequest.EndDate.Date;
+            upsertJourneyRequest.StartDate = upsertJourneyRequest.StartDate.Date;
+            var updateValidator = new UpdateJourneyValidator();
+
+            var updateValidationResult = updateValidator.Validate(upsertJourneyRequest);
+
+            Assert.IsFalse(updateValidationResult.IsValid);
+        }
+        [Test]
+        public async Task UpdateJourneyTest_Success()
         {
             Assert.Pass();
         }
         [Test]
-        public void UpdateJourneyValidator_InvalidRequest()
-        {
-            Assert.Pass();
-        }
-        [Test]
-        public async Task UpdateJourney_JourneyExist()
-        {
-            Assert.Pass();
-        }
-        [Test]
-        public async Task UpdateJourney_JourneyNotExist()
+        public async Task UpdateJourneyTest_JourneyNotExist()
         {
             Assert.Pass();
         }
@@ -96,12 +110,21 @@ namespace PTP.Test
             Assert.Pass();
         }
         [Test]
-        public async Task IsJourneyExistTest_J()
+        public async Task IsJourneyExistTest_JourneyNotExist()
         {
-            Assert.Pass(); 
+            var journeyList = await _journeyRepository.GetAllAsyncNoTracking();
+            var lastJourney = journeyList.Last();
+            var entity = await _journeyRepository.GetAsyncNoTracking(lastJourney.Id + 1);
+            Assert.AreEqual(default(Journey), entity);
+        }
+        public async Task IsJourneyExistTest_JourneyExist()
+        {
+            var journeyIdExist = 1;
+            var entity = await _journeyRepository.GetAsyncNoTracking(journeyIdExist);
+            Assert.AreNotEqual(default(Journey), entity);
         }
         [Test]
-        public async Task IsCurrencyExist()
+        public async Task IsCurrencyExistTest()
         {
             Assert.Pass();
         }
