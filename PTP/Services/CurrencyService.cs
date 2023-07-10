@@ -1,24 +1,37 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using PTP.Core.Domain.Entities;
 using PTP.Core.Domain.Objects;
+using PTP.Core.Dtos;
 using PTP.Core.Exceptions;
 using PTP.Core.Interfaces.Repositories;
 using PTP.Core.Interfaces.Services;
+using PTP.Validator;
 
 namespace PTP.Services
 {
     public class CurrencyService : ICurrencyService
     {
         private readonly IRepository<Currency> _currencyRepository;
+        private readonly IMapper _mapper;
 
-        public CurrencyService(IRepository<Currency> currencyRepository)
+        public CurrencyService(IRepository<Currency> currencyRepository, IMapper mapper)
         {
             _currencyRepository = currencyRepository;
+            _mapper = mapper;
         }
 
-        public async Task InsertNewCurrency(Currency newCurrency, CancellationToken cancellationToken = default)
+        public async Task InsertNewCurrency(UpsertCurrencyRequestDto upsertCurrencyRequest, CancellationToken cancellationToken = default)
         {
-            await _currencyRepository.AddAsync(newCurrency);
+            var insertValidator = new InsertNewCurrencyValidator();
+            var insertValidationResult = insertValidator.Validate(upsertCurrencyRequest);
+            if (!insertValidationResult.IsValid)
+            {
+                throw new BadUserInputException(insertValidationResult.Errors[0].ErrorMessage);
+            }
+            var entity = _mapper.Map<Currency>(upsertCurrencyRequest);
+            await _currencyRepository.AddAsync(entity);
             await _currencyRepository.SaveChangesAsync();
         }
 
@@ -63,22 +76,24 @@ namespace PTP.Services
             return _currencyRepository.Get();
         }
 
-        public async Task UpdateCurrency(Currency updatedCurrency, CancellationToken cancellationToken = default)
+        public async Task UpdateCurrency(UpsertCurrencyRequestDto upsertCurrencyRequest, CancellationToken cancellationToken = default)
         {
-            var entity = await _currencyRepository.GetAsync(updatedCurrency.Id);
-            if (entity == default(Currency))
+            var updateValidator = new UpdateCurrencyValidator();
+            var updateValidationResult = updateValidator.Validate(upsertCurrencyRequest);
+            if (!updateValidationResult.IsValid)
             {
-                throw new CurrencyNotFoundException($"Currency with id: {updatedCurrency.Id} doesn't exist");
+                throw new BadUserInputException(updateValidationResult.Errors[0].ErrorMessage);
             }
 
-            MapFromUpdateToEntity(updatedCurrency, entity);
-            await _currencyRepository.SaveChangesAsync();
-        }
+            var entity = await _currencyRepository.GetAsync((int)upsertCurrencyRequest.Id);
+            if (entity == default(Currency))
+            {
+                throw new CurrencyNotFoundException($"Currency with id: {upsertCurrencyRequest.Id} doesn't exist");
+            }
 
-        private void MapFromUpdateToEntity(Currency updatedCurrency, Currency entity)
-        {
-            entity.Name = updatedCurrency.Name;
-            entity.Version = updatedCurrency.Version;
+            entity = _mapper.Map<Currency>(entity);
+            _currencyRepository.Update(entity);
+            await _currencyRepository.SaveChangesAsync();
         }
     }
 }

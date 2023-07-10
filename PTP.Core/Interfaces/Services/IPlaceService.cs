@@ -13,6 +13,7 @@ namespace PTP.Core.Interfaces.Services
     {
         Task<Place?> GetById(int id, CancellationToken cancellationToken = default);
         Task<IEnumerable<Place>?> GetAll(CancellationToken cancellationToken = default);
+        Task<IEnumerable<Place>?> GetAllByCountryId(int countryId,CancellationToken cancellationToken = default);
         Task InsertNewPlace(UpsertPlaceRequestDto newPlace, CancellationToken cancellationToken = default);
         Task DeletePlace(int id, CancellationToken cancellationToken = default);
         Task UpdatePlace(UpsertPlaceRequestDto updatedPlace, CancellationToken cancellationToken = default);

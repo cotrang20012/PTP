@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using PTP.Core.Domain.Entities;
 using PTP.Core.Domain.Enums;
 using PTP.Core.Dtos;
 
@@ -9,7 +10,7 @@ namespace PTP.Validator
         public UpdateJourneyValidator()
         {
             RuleFor(dto => dto.Id)
-                .GreaterThan(0).WithMessage("Journey Id is needed for update");
+                .NotEmpty().GreaterThan(0).WithMessage("Journey Id is needed for update");
             RuleFor(dto => dto.Name)
                 .NotEmpty().WithMessage("Journey name is required.");
             RuleFor(dto => dto.Description)
@@ -23,11 +24,11 @@ namespace PTP.Validator
             RuleFor(dto => dto.Amount)
                 .NotEmpty().GreaterThan(0).WithMessage("Journey need to be associate with an amount");
             RuleFor(dto => dto.CurrencyName)
-                .NotEmpty().WithMessage("Please choose a currency");
+                .NotEmpty().WithMessage("Currency is required.");
             RuleFor(dto => dto.CountryName)
-                .NotEmpty().WithMessage("Please choose a country");
+                .NotEmpty().WithMessage("Country is required.");
             RuleFor(dto => dto.PlaceName)
-                .NotEmpty().WithMessage("Please choose a places");
+                .NotEmpty().WithMessage("Places is required.");
 
             RuleFor(dto => dto.StartDate)
                 .NotEmpty().WithMessage("Journey need to have a start date");
@@ -39,6 +40,9 @@ namespace PTP.Validator
 
             RuleFor(dto => dto.Status)
                 .Must(value => Enum.IsDefined(typeof(JourneyStatus), value)).WithMessage("Invalid value for journey Status.");
+
+            RuleFor(dto => dto.Version)
+                .NotEmpty().WithMessage("Version is needed to update journey");
         }
 
     }

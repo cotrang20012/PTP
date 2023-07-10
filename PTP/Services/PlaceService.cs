@@ -15,15 +15,11 @@ namespace PTP.Services
     public class PlaceService : IPlaceService
     {
         private readonly IRepository<Place> _placeRepository;
-        private readonly IJourneyService _journeyService;
-        private readonly IRepository<Country> _countryRepository;
         private readonly IRepository<Journey> _journeyRepository;
         private readonly IMapper _mapper;
-        public PlaceService(IRepository<Place> placeRepository, IJourneyService journeyService, IRepository<Country> countryRepository,IMapper mapper, IRepository<Journey> journeyRepository)
+        public PlaceService(IRepository<Place> placeRepository, IMapper mapper, IRepository<Journey> journeyRepository)
         {
             _placeRepository = placeRepository;
-            _journeyService = journeyService;
-            _countryRepository = countryRepository;
             _mapper = mapper;
             _journeyRepository = journeyRepository;
         }
@@ -110,6 +106,12 @@ namespace PTP.Services
             entity = _mapper.Map<Place>(entity);
             _placeRepository.Update(entity);
             await _placeRepository.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<Place>?> GetAllByCountryId(int countryId, CancellationToken cancellationToken = default)
+        {
+            var entity = await _placeRepository.Get().Where(p => p.CountryId == countryId).ToListAsync();
+            return entity;
         }
     }
 }

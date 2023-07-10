@@ -10,9 +10,11 @@ namespace PTP.Validator
             RuleFor(dto => dto.Id)
                 .NotEmpty().GreaterThan(0).WithMessage("Place Id is needed for update");
             RuleFor(dto => dto.Name)
-                .NotEmpty().WithMessage("Place need to have a name");
+                .NotEmpty().WithMessage("Place name is required.");
             RuleFor(dto => dto.CountryId)
-                    .NotEmpty().GreaterThan(0).WithMessage("Place need to be associate with a Country");
+                .NotEmpty().GreaterThan(0).WithMessage("Place need to be associate with a Country");
+            RuleFor(dto => dto.Version)
+                .NotEmpty().WithMessage("Version is needed to update place");
         }
         
     }

@@ -7,7 +7,7 @@ using PTP.Validator;
 namespace PTP.Test
 {
     [TestFixture]
-    public class JourneyServiceTest : JourneyTestService
+    public class JourneyServiceTest : TestService
     {
         [Test]
         public void InsertNewJourneyValidatorTest_ValidRequest()

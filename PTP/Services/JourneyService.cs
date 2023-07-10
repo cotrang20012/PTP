@@ -87,7 +87,7 @@ namespace PTP.Services
             }
 
             var entities = await journeyQuery.Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize).Include(j => j.Country).Include(j => j.Currency).ToListAsync();
+                .Take(pageSize).Include(j => j.Country).Include(j => j.Currency).OrderBy(j => j.StartDate).ToListAsync();
             foreach (var entity in entities)
             {
                 var places = await _placeRepository.Get().Where(x => entity.PlaceId.Contains(x.Id.ToString())).ToListAsync();

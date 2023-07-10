@@ -23,7 +23,7 @@ namespace PTP.Test.Data
             DbContext.Database.EnsureDeleted();
         }
 
-        public PTPContext GetDatabaseContext()
+        public PTPContext GetDatabaseContext()  
         {
             return DbContext;
         }
@@ -34,8 +34,6 @@ namespace PTP.Test.Data
         }
         public void CleanUpDatabaseAndDispose()
         {
-            DbContext.ChangeTracker.Clear();
-            DbContext.Database.EnsureDeleted();
             DbContext.Dispose();
         }
         public void CreateDataForDatabase()

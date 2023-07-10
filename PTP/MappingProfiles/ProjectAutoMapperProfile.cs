@@ -11,6 +11,8 @@ namespace PTP.MappingProfiles
             CreateMap<Journey, JourneyDto>();
             CreateMap<UpsertJourneyRequestDto, Journey>();
             CreateMap<UpsertPlaceRequestDto, Place>();
+            CreateMap<UpsertCountryRequestDto, Country>();
+            CreateMap<UpsertCurrencyRequestDto, Currency>();
         }
     }
 }

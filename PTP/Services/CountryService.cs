@@ -1,24 +1,36 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using PTP.Core.Domain.Entities;
 using PTP.Core.Domain.Objects;
+using PTP.Core.Dtos;
 using PTP.Core.Exceptions;
 using PTP.Core.Interfaces.Repositories;
 using PTP.Core.Interfaces.Services;
+using PTP.Validator;
 
 namespace PTP.Services
 {
     public class CountryService : ICountryService
     {
         private readonly IRepository<Country> _countryRepository;
+        private readonly IMapper _mapper;
 
-        public CountryService(IRepository<Country> countryService)
+        public CountryService(IRepository<Country> countryService, IMapper mapper)
         {
+            _mapper = mapper;
             _countryRepository = countryService;
         }
 
-        public async Task InsertNewCountry(Country newCountry, CancellationToken cancellationToken = default)
+        public async Task InsertNewCountry(UpsertCountryRequestDto upsertCountryRequest, CancellationToken cancellationToken = default)
         {
-            await _countryRepository.AddAsync(newCountry);
+            var insertValidator = new InsertNewCountryValidator();
+            var insertValidationResult = insertValidator.Validate(upsertCountryRequest);
+            if(!insertValidationResult.IsValid)
+            {
+                throw new BadUserInputException(insertValidationResult.Errors[0].ErrorMessage);
+            }
+            var entity = _mapper.Map<Country>(upsertCountryRequest);
+            await _countryRepository.AddAsync(entity);
             await _countryRepository.SaveChangesAsync();
         }
 
@@ -61,22 +73,24 @@ namespace PTP.Services
         {
             return _countryRepository.Get();
         }
-        public async Task UpdateCountry(Country updatedCountry, CancellationToken cancellationToken = default)
+        public async Task UpdateCountry(UpsertCountryRequestDto upsertCountryRequest, CancellationToken cancellationToken = default)
         {
-            var entity = await _countryRepository.GetAsync(updatedCountry.Id);
+            var updateValidator = new UpdateCountryValidator();
+            var updateValidationResult = updateValidator.Validate(upsertCountryRequest);
+            if (!updateValidationResult.IsValid)
+            {
+                throw new BadUserInputException(updateValidationResult.Errors[0].ErrorMessage);
+            }
+
+            var entity = await _countryRepository.GetAsync((int)upsertCountryRequest.Id);
             if (entity == default(Country))
             {
-                throw new CountryNotFoundException($"Journey with id: {updatedCountry.Id} doesn't exist");
+                throw new CountryNotFoundException($"Country with id: {upsertCountryRequest.Id} doesn't exist");
             }
-            //await Task.Delay(3000);
-            MapFromUpdateToEntity(updatedCountry, entity);
+            entity = _mapper.Map<Country>(entity);
+            _countryRepository.Update(entity);
             await _countryRepository.SaveChangesAsync();
         }
 
-        private void MapFromUpdateToEntity(Country updatedCountry, Country entity)
-        {
-            entity.Name = updatedCountry.Name;
-            entity.Version = updatedCountry.Version;
-        }
     }
 }

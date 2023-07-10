@@ -13,7 +13,7 @@ using System.Reflection;
 namespace PTP.Test.Services
 {
     [SetUpFixture]
-    public class JourneyTestService
+    public class TestService
     {
         protected InMemoryPTPControllerTestContext _context;
         protected IRepository<Journey> _journeyRepository;

@@ -10,12 +10,10 @@ namespace PTP.Controllers
     public class PlaceController : ControllerBase
     {
         private readonly IPlaceService _placeService;
-        private readonly IMapper _mapper;
 
-        public PlaceController(IPlaceService placeService, IMapper mapper)
+        public PlaceController(IPlaceService placeService)
         {
             _placeService = placeService;
-            _mapper = mapper;
         }
 
         [HttpDelete("{id}")]
@@ -26,10 +24,17 @@ namespace PTP.Controllers
             return Ok(response);
         }
         [HttpPut]
-        public async Task<ActionResult> AddPlace([FromBody]UpsertPlaceRequestDto upsertPlaceRequest)
+        public async Task<ActionResult> InsertNewPlace([FromBody]UpsertPlaceRequestDto upsertPlaceRequest)
         {
             await _placeService.InsertNewPlace(upsertPlaceRequest);
-            var response = _placeService.CreateBaseResponse(true, "Insert new place succes", null, "None", StatusCodes.Status200OK);
+            var response = _placeService.CreateBaseResponse(true, "Insert new place success", null, "None", StatusCodes.Status200OK);
+            return Ok(response);
+        }
+        [HttpGet("{countryId}")]
+        public async Task<ActionResult> GetPlaceByCountryId([FromRoute]int countryId)
+        {
+            var entites = await _placeService.GetAllByCountryId(countryId);
+            var response = _placeService.CreateBaseResponse(true, "Get all place by country id success", entites, "None", StatusCodes.Status200OK);
             return Ok(response);
         }
     }

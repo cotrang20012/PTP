@@ -8,7 +8,7 @@ namespace PTP.Validator
         public InsertNewPlaceValidator() 
         { 
             RuleFor(dto => dto.Name)
-                .NotEmpty().WithMessage("Place need to have a name");
+                .NotEmpty().WithMessage("Place name is required.");
             RuleFor(dto => dto.CountryId)
                 .NotEmpty().GreaterThan(0).WithMessage("Place need to be associate with a Country");
         }
