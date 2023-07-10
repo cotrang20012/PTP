@@ -116,11 +116,7 @@ namespace PTP.Test
             _journeyRepository.Update(entity);
             Assert.ThrowsAsync<DbUpdateConcurrencyException>(async () => await _journeyRepository.SaveChangesAsync());
         }
-        [Test]
-        public async Task RemovePlacesFromJourneyTest()
-        {
-            Assert.Pass();
-        }
+
         [Test]
         public async Task IsJourneyExistTest_JourneyNotExist()
         {
