@@ -71,6 +71,7 @@ namespace PTP.Test.Data
                 );
 
             DbContext.SaveChanges();
+            DbContext.ChangeTracker.Clear();
         }
 
     }

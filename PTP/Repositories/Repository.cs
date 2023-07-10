@@ -44,9 +44,9 @@ namespace PTP.Repositories
             _set.RemoveRange(entities);
         }
 
-        public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
+        public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            await _ptpContext.SaveChangesAsync(cancellationToken);
+            return await _ptpContext.SaveChangesAsync(cancellationToken);
         }
 
         public void Attach(params T[] entities)

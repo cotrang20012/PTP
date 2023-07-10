@@ -140,8 +140,7 @@ namespace PTP.Services
                 throw new JourneyNotFoundException($"Journey with name: {updatedJourney.Name} doesn't exist");
             }
             await ValidateUpsertJourneyRequest(updatedJourney);
-            var entity = await _journeyRepository.GetAsync((int)updatedJourney.Id);
-            entity = _mapper.Map<Journey>(updatedJourney);
+            var entity = _mapper.Map<Journey>(updatedJourney);
             _journeyRepository.Update(entity);
             await _journeyRepository.SaveChangesAsync();
         }

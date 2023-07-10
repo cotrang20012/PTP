@@ -1,4 +1,5 @@
-﻿using PTP.Core.Domain.Objects;
+﻿using Microsoft.EntityFrameworkCore;
+using PTP.Core.Domain.Objects;
 using PTP.Core.Exceptions;
 using System.Text.Json;
 
@@ -26,7 +27,11 @@ namespace PTP.Middlewares
                 _logger.LogError(ex, "Unexpected exception occure");
                 context.Response.ContentType = "application/json";
                 context.Response.StatusCode = 500;
-
+                if (ex is DbUpdateConcurrencyException)
+                {
+                    _logger.LogError(ex, ex.Message);
+                    context.Response.StatusCode = StatusCodes.Status409Conflict;
+                }
                 if (ex is JourneyNotFoundException || ex is CountryNotFoundException
                     || ex is PlaceNotFoundException || ex is CurrencyNotFoundException || ex is BadUserInputException)
                 {

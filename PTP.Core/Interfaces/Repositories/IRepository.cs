@@ -12,7 +12,7 @@ namespace PTP.Core.Interfaces.Repositories
         Task AddRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default);
         Task AddAsync(T entity, CancellationToken cancellationToken = default);
         void Delete(params T[] entities);
-        Task SaveChangesAsync(CancellationToken cancellationToken = default);
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
         DbSet<T> DbSet { get; }
         void Attach(params T[] entities);
         void Update(params T[] entities);
